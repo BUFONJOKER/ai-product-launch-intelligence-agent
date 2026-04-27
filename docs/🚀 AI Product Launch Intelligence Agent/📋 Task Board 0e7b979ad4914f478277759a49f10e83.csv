@@ -1,0 +1,43 @@
+﻿Task Name,Category,Completion Time (hours),Difficulty,Status,Task ID
+"State Definition – Define the global AgentState TypedDict to hold messages, tool outputs, and final reports.",Backend --- Agents using LangGraph,2,Medium,Not Started,1
+"Next.js Init – Initialize the app with TypeScript, Tailwind CSS, and shadcn/ui.",Frontend --- NextJS,2,Easy,Not Started,1
+UV Environment – Initialize the project using the uv package manager with core dependencies.,Backend --- APIs using FastAPI,1,Easy,Not Started,1
+"Modular Structure – Set up the folder hierarchy (app/api, app/agents, app/core).",Backend --- APIs using FastAPI,1,Easy,Not Started,2
+Auth Middleware – Implement API Key validation for Firecrawl and OpenAI via request headers.,Backend --- APIs using FastAPI,2,Medium,Not Started,3
+Analysis Endpoint – Create a POST route to trigger the LangGraph execution thread.,Backend --- APIs using FastAPI,2,Easy,Not Started,4
+SSE Streaming – Implement Server-Sent Events (SSE) to stream real-time logs to the UI.,Backend --- APIs using FastAPI,5,Hard,Not Started,5
+"WebSocket Setup – Configure WebSockets for interactive, real-time agent/user dialogue.",Backend --- APIs using FastAPI,4,Medium,Not Started,6
+Event Mapping – Map LangGraph's astream_events to the FastAPI streaming response.,Backend --- APIs using FastAPI,5,Hard,Not Started,7
+Supabase Storage – Connect Supabase PostgreSQL to store persistent analysis reports.,Backend --- APIs using FastAPI,3,Medium,Not Started,8
+CORS Config – Securely configure Cross-Origin Resource Sharing for the Next.js domain.,Backend --- APIs using FastAPI,1,Easy,Not Started,9
+Swagger Docs – Generate and verify interactive OpenAPI documentation for the backend.,Backend --- APIs using FastAPI,1,Easy,Not Started,10
+Dashboard Layout – Build a sidebar for history and a main area for the intelligence dashboard.,Frontend --- NextJS,4,Medium,Not Started,2
+"Tabbed Interface – Create a three-tab view (Competitor, Sentiment, Metrics) for analysis.",Frontend --- NextJS,3,Easy,Not Started,3
+"Search UX – Design the input bar for company names, products, or hashtags.",Frontend --- NextJS,2,Easy,Not Started,4
+"Real-time Feed – Build a ""Thought Feed"" component to show live agent activity.",Frontend --- NextJS,6,Hard,Not Started,5
+Markdown Renderer – Implement a renderer for the agents' detailed Markdown reports.,Frontend --- NextJS,3,Medium,Not Started,6
+Hotkey Integration – Program keyboard shortcuts (J/K/L) for rapid tab switching.,Frontend --- NextJS,2,Easy,Not Started,7
+Sources Card – Create a UI component to list clickable URLs and metadata found by agents.,Frontend --- NextJS,2,Easy,Not Started,8
+Data Fetching – Use React Query/SWR to manage session history and report status.,Frontend --- NextJS,4,Medium,Not Started,9
+"Export Feature – Add a ""Download"" button to save generated reports as PDF or Markdown files.",Frontend --- NextJS,3,Medium,Not Started,10
+Persistence Setup – Implement state persistence using a SqliteSaver checkpointer for long-running threads.,Backend --- Agents using LangGraph,3,Medium,Not Started,2
+Competitor Schema – Design Pydantic models for structured outputs for the Product Launch Analyst.,Backend --- Agents using LangGraph,2,Easy,Not Started,3
+Sentiment Schema – Design Pydantic models for sentiment scoring and categorized social chatter.,Backend --- Agents using LangGraph,2,Easy,Not Started,4
+"Graph Initialization – Initialize the StateGraph and set the entry point for user queries.
+
+",Backend --- Agents using LangGraph,2,Medium,Not Started,5
+Launch Analyst Node – Configure the node logic and system prompts for the GTM Strategist agent.,Backend --- Agents using LangGraph,5,Hard,Not Started,6
+Sentiment Specialist Node – Configure the node logic for the Market Sentiment Guru agent.,Backend --- Agents using LangGraph,4,Hard,Not Started,7
+Metrics Specialist Node – Configure the node logic for the Performance Analyst agent.,Backend --- Agents using LangGraph,4,Hard,Not Started,8
+Router Implementation – Build a supervisor node to delegate queries to the appropriate specialist.,Backend --- Agents using LangGraph,3,Medium,Not Started,9
+Firecrawl Search Tool – Build a tool for real-time web searching and markdown conversion.,Backend --- Agents using LangGraph,2,Easy,Not Started,10
+Firecrawl Deep Crawl Tool – Build a tool for deep-diving into specific competitor URLs.,Backend --- Agents using LangGraph,3,Medium,Not Started,11
+"Thread Management – Configure short-term ""thread"" memory to handle multi-turn user follow-ups.",Backend --- Agents using LangGraph,2,Medium,Not Started,12
+Conditional Edges – Implement logic to determine if an agent needs more research before finishing.,Backend --- Agents using LangGraph,4,Hard,Not Started,13
+Collator Node – Create a node that merges outputs from all three specialists into a unified report.,Backend --- Agents using LangGraph,3,Medium,Not Started,14
+RAG Integration – Build a Vector Store retriever tool for internal company PDF/Notion docs.,Backend --- Agents using LangGraph,6,Hard,Not Started,15
+Error Handling – Add retry logic and graceful failure nodes for API timeouts.,Backend --- Agents using LangGraph,3,Medium,Not Started,16
+"Output Validation – Implement a ""Critique"" node to cross-reference metrics against sources.",Backend --- Agents using LangGraph,5,Hard,Not Started,17
+Human-in-the-Loop – Add a breakpoint for manual approval before generating deep-dive reports.,Backend --- Agents using LangGraph,4,Medium,Not Started,18
+Prompt Optimization – Fine-tune system messages to minimize token usage and latency.,Backend --- Agents using LangGraph,3,Medium,Not Started,19
+Node Testing – Write unit tests for individual graph nodes using mocked tool responses.,Backend --- Agents using LangGraph,5,Medium,Not Started,20

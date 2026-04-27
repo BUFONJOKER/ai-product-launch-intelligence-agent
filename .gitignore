@@ -1,0 +1,92 @@
+# =========================================
+# 🔹 ROOT LEVEL
+# =========================================
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Secrets (CRITICAL)
+.env
+.env.*
+!.env.example
+
+# Media (ignore only root mp4 files)
+*.mp4
+
+# Misc
+*.pem
+
+# =========================================
+# 🔹 BACKEND (FastAPI / Python)
+# =========================================
+
+backend/.venv/
+backend/env/
+backend/venv/
+backend/ENV/
+
+backend/__pycache__/
+backend/*.py[cod]
+backend/*$py.class
+
+backend/.pytest_cache/
+backend/.ipynb_checkpoints/
+
+backend/*.egg-info/
+backend/dist/
+backend/build/
+
+backend/generated_images/
+
+# Python version file (optional to ignore)
+backend/.python-version
+
+# =========================================
+# 🔹 FRONTEND (Next.js / pnpm)
+# =========================================
+
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# Next.js types (auto-generated)
+frontend/next-env.d.ts
+
+# Env files (frontend-specific)
+frontend/.env*
+!frontend/.env.example
+
+# =========================================
+# 🔹 PACKAGE MANAGERS
+# =========================================
+
+.pnp
+.pnp.js
+
+# =========================================
+# 🔹 DEPLOYMENT
+# =========================================
+
+.vercel
+coverage/
+
+# =========================================
+# 🔹 OPTIONAL (uncomment if needed)
+# =========================================
+
+# frontend/public/uploads
+# backend/data
+
