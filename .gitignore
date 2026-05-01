@@ -31,7 +31,9 @@ pnpm-debug.log*
 # =========================================
 # 🔹 BACKEND (FastAPI / Python)
 # =========================================
-
+# iclude pycache in any folder or subfolder of backend, but exclude pycache in frontend
+backend/**/__pycache__/
+backend/**/*.py[cod]
 backend/.venv/
 backend/env/
 backend/venv/
@@ -89,4 +91,3 @@ coverage/
 
 # frontend/public/uploads
 # backend/data
-

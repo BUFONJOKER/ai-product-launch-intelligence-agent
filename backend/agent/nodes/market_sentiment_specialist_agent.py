@@ -1,0 +1,2 @@
+def MarketSentimentSpecialistAgent(model):
+    pass

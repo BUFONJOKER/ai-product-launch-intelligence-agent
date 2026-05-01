@@ -1,0 +1,2 @@
+def SupervisorAgent(model):
+    pass
