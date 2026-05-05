@@ -1,5 +1,11 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class AgentState(BaseModel):
     """State schema for the agent workflow."""
-    user_input: str
+    company_name: str = Field(..., description="Name of the company being analyzed")
+
+    launch_metrics_specialist_agent_output: str = Field(default="", description="Output from the Launch Metrics Specialist Agent")
+
+    market_sentiment_specialist_agent_output: str = Field(default="", description="Output from the Market Sentiment Specialist Agent")
+
+    product_launch_analyst_agent_output: str = Field(default="", description="Output from the Product Launch Analyst Agent")

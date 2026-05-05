@@ -8,6 +8,9 @@ dependencies = [
     "dotenv>=0.9.9",
     "fastapi>=0.136.1",
     "langchain>=1.2.15",
+    "langchain-ollama>=1.1.0",
+    "langchain-openai>=1.2.1",
+    "langchain-tavily>=0.2.18",
     "langgraph>=1.1.10",
     "streamlit>=1.56.0",
 ]
