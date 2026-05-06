@@ -8,7 +8,6 @@ from agent.tools.tavily_search import web_search_tool
 # from agent.model.initialize_model import load_model
 from langchain.agents.middleware import ToolCallLimitMiddleware
 
-
 def MarketSentimentSpecialistAgent(model, state: AgentState):
     """Analyze market sentiment and public perception around a product launch."""
 
