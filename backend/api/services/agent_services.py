@@ -11,13 +11,15 @@ async def run_agent_service(company_name: str, agent_invoke: str, thread_id: str
     Args:
         company_name (str): The name of the company to analyze.
         agent_invoke (str): Identifier of which specialist agent to run
-
+        thread_id (str): The UUID string for tracking the agent run.
+    
     Returns:
         dict: A dictionary containing the thread ID, the response from the
             agent workflow, and a status message.
     """
 
-    agent_run_result = await run_agent(company_name, agent_invoke)
+
+    agent_run_result = await run_agent(company_name, agent_invoke, thread_id)
 
     # Optionally, you can also fetch the final response using the thread_id
     # final_response = await get_agent_response(thread_id)

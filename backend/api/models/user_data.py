@@ -19,3 +19,11 @@ class UserData(Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     email: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
+
+
+class UserAgentThread(Base):
+    __tablename__ = "user_agent_thread"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    email: Mapped[str] = mapped_column(String(255), nullable=False)
+    thread_id: Mapped[str] = mapped_column(String(255), nullable=False)

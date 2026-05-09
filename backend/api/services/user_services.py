@@ -1,9 +1,10 @@
 from sqlalchemy.orm import Session
 
-from api.models.user_data import UserData
-from api.schemas.user_data import UserCreate, UserResponse
+from api.models.user_data import UserData, UserAgentThread
+from api.schemas.user_data import UserCreate
 from api.password_hash.hash_password import get_password_hash
 from api.password_hash.verify_password import verify_password
+
 
 def create_user(db: Session, user_data: UserCreate):
     """Create a new user in the database.
@@ -19,15 +20,23 @@ def create_user(db: Session, user_data: UserCreate):
     user = UserData(**user_data.model_dump())
     password = user_data.password
     password_hash = get_password_hash(password)
-    user.password= password_hash
+    user.password = password_hash
     db.add(user)
     db.commit()
     db.refresh(user)
 
-    return user
+    if user.id is None:
+        raise Exception("Failed to create user")
+
+    return {
+        "id": user.id,
+        "name": user.name,
+        "email": user.email,
+        "message": "User created successfully",
+    }
 
 
-def update_user(db: Session, user_id: int, user_data: UserCreate):
+def update_user(db: Session, user_data: UserCreate):
     """Update an existing user's fields.
 
     Args:
@@ -40,7 +49,7 @@ def update_user(db: Session, user_id: int, user_data: UserCreate):
             `None` when the user does not exist.
     """
 
-    user = db.query(UserData).filter(UserData.id == user_id).first()
+    user = db.query(UserData).filter(UserData.email == user_data.email).first()
 
     if not user:
         return None
@@ -53,21 +62,26 @@ def update_user(db: Session, user_id: int, user_data: UserCreate):
     db.commit()
     db.refresh(user)
 
-    return user
+    return {
+        "id": user.id,
+        "name": user.name,
+        "email": user.email,
+        "message": "User Updated Successfully",
+    }
 
 
-def delete_user(db: Session, user_id: int):
+def delete_user(db: Session, user_data: UserCreate):
     """Delete a user by ID.
 
     Args:
         db (Session): SQLAlchemy session.
-        user_id (int): ID of the user to delete.
+        user_data (UserCreate): Schema containing user email for deletion.
 
     Returns:
         bool | None: `True` if deletion succeeded, `None` if user not found.
     """
 
-    user = db.query(UserData).filter(UserData.id == user_id).first()
+    user = db.query(UserData).filter(UserData.name == user_data.name, UserData.email == user_data.email).first()
 
     if not user:
         return None
@@ -78,24 +92,33 @@ def delete_user(db: Session, user_id: int):
     return True
 
 
-def get_user(db: Session, user_id: int):
-    """Retrieve a user ORM instance by ID.
+def get_user(db: Session, email: str, password: str):
+    """Retrieve a user ORM instance by email and password.
 
     Args:
         db (Session): SQLAlchemy session.
-        user_id (int): ID of the user to retrieve.
+        email (str): Email address of the user to retrieve.
+        password (str): Plain-text password for verification.
+
 
     Returns:
         UserData | None: The `UserData` ORM instance if found, otherwise
             `None`.
     """
 
-    user = db.query(UserData).filter(UserData.id == user_id).first()
+    user = db.query(UserData).filter(UserData.email == email).first()
 
     if not user:
         return None
 
-    return user
+    if not verify_password(password, user.password):
+        return None
+
+    return {
+        "name": user.name,
+        "email": user.email,
+        "message": "User retrieved successfully",
+    }
 
 
 def get_users(db: Session):
@@ -123,3 +146,32 @@ def add_user(db: Session, user_data: UserCreate):
     """
 
     return create_user(db, user_data)
+
+
+def add_user_agent_thread(db: Session, email: str, thread_id: str):
+    """Add a new user agent thread record to the database.
+
+    This function creates a new entry in the `UserAgentThread` table with
+    the provided email and thread ID. It can be used to log threads  from
+    user agents for later retrieval.
+
+    Args:
+        db (Session): SQLAlchemy session used for the transaction.
+        email (str): The email address associated with the user agent thread.
+        thread_id (str): The unique thread ID for tracking the agent run.
+    """
+
+    user = UserAgentThread(email=email, thread_id=thread_id)
+
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+
+    if user.id is None:
+        raise Exception("Failed to create user agent thread")
+
+    return {
+        "email": user.email,
+        "thread_id": user.thread_id,
+        "message": "User agent thread created successfully",
+    }

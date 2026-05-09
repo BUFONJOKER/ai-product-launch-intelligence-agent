@@ -1,5 +1,4 @@
 import asyncio
-import uuid
 
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 
@@ -11,7 +10,7 @@ from config import DB_URL
 from psycopg import AsyncConnection
 
 
-async def run_agent(company_name: str, agent_invoke: str):
+async def run_agent(company_name: str, agent_invoke: str,thread_id: str):
     """Run the AI product-launch agent workflow asynchronously.
 
     This function prepares an initial agent state, initializes persistence
@@ -31,7 +30,6 @@ async def run_agent(company_name: str, agent_invoke: str):
             - `agent_run_status` (str): Short status message.
     """
 
-    thread_id = str(uuid.uuid4())
 
     config = {"configurable": {"thread_id": thread_id}}
 
@@ -107,8 +105,9 @@ if __name__ == "__main__":
     # asyncio.run(run_agent(company_name=company_name, agent_invoke=agent_options[0]))
 
     result = asyncio.run(
-        get_final_response(thread_id="d7c01c29-f953-4d79-b3ee-6584ee1d37d7")
+        get_final_response(thread_id="728f54fe-0915-4db2-a560-be465b24695f")
     )
+
     print(result["product_launch_analyst_agent_output"])
     print("------------------------------")
     print(result["launch_metrics_specialist_agent_output"])

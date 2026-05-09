@@ -12,7 +12,7 @@ load_dotenv(dotenv_path=env_path)
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 DB_URL = os.getenv("DB_URL")
 DB_URL_API = os.getenv("DB_URL_API")
-
+ACCESS_TOKEN_SECRET_KEY = os.getenv("ACCESS_TOKEN_SECRET_KEY")
 # Other configurations
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 ENV = os.getenv("ENV", "development")
@@ -26,3 +26,6 @@ if not DB_URL:
 
 if not DB_URL_API:
     raise ValueError("DB_URL_API is not set in .env file")
+
+if not ACCESS_TOKEN_SECRET_KEY:
+    raise ValueError("ACCESS_TOKEN is not set in .env file")

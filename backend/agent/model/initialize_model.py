@@ -14,6 +14,6 @@ def load_model():
             using the "gpt-5-nano" model with temperature set to 0).
     """
 
-    model = ChatOpenAI(model="gpt-5-nano", temperature=0)
+    model = ChatOpenAI(model="gpt-5-nano", temperature=0, streaming=True)
 
     return model
