@@ -15,4 +15,5 @@ dependencies = [
     "langgraph-checkpoint-postgres>=3.0.5",
     "psycopg[binary,pool]>=3.3.4",
     "streamlit>=1.56.0",
+    "uvicorn>=0.46.0",
 ]
