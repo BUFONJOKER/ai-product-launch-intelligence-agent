@@ -10,15 +10,7 @@ from agent.state_schema.agent_state import AgentState
 from config import DB_URL
 
 
-async def main():
-
-    company_name = "Apple Vision Pro"
-
-    agent_options = [
-        "product_launch_analyst",
-        "market_sentiment_specialist",
-        "launch_metrics_specialist",
-    ]
+async def run_agent(company_name:str, agent_invoke:str):
 
     thread_id = str(uuid.uuid4())
 
@@ -30,7 +22,7 @@ async def main():
 
     initial_state = AgentState(
         company_name=company_name,
-        agent_invoke=agent_options[0]
+        agent_invoke=agent_invoke
     )
 
     async with AsyncPostgresSaver.from_conn_string(DB_URL) as checkpointer:
@@ -51,6 +43,8 @@ async def main():
 
         print(response)
 
+    return response
+
 
 if __name__ == "__main__":
 
@@ -59,4 +53,12 @@ if __name__ == "__main__":
         asyncio.WindowsSelectorEventLoopPolicy()
     )
 
-    asyncio.run(main())
+    company_name = "Apple Vision Pro"
+
+    agent_options = [
+        "product_launch_analyst",
+        "market_sentiment_specialist",
+        "launch_metrics_specialist",
+    ]
+
+    asyncio.run(run_agent(company_name=company_name, agent_invoke=agent_options[0]))
