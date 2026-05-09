@@ -1,15 +1,35 @@
 import streamlit as st
+
 # import subprocess
 # import sys
 # from pathlib import Path
 from agent.state_schema.agent_state import AgentState
 from langchain.agents import create_agent
 from agent.tools.tavily_search import web_search_tool
+
 # from agent.model.initialize_model import load_model
 from langchain.agents.middleware import ToolCallLimitMiddleware
 
+
 def ProductLaunchAnalystAgent(model, state: AgentState):
-    """Analyze a product launch using AI agent."""
+    """Run a product launch analysis using a provided language model.
+
+    This function constructs a specialized system prompt, attaches a
+    web-search tool, creates a LangChain agent, and invokes it to analyze
+    the product launch for `state.company_name`.
+
+    Args:
+        model: A language model instance compatible with LangChain agents
+            (for example, a `ChatOpenAI` instance returned by
+            `load_model`).
+        state (AgentState): The agent state object containing input
+            values such as `company_name` and `agent_invoke`.
+
+    Returns:
+        dict: A dictionary with a single key
+            `'product_launch_analyst_agent_output'` containing the
+            agent's textual analysis output.
+    """
     company_name = state.company_name
 
     system_prompt = """
@@ -68,9 +88,7 @@ def ProductLaunchAnalystAgent(model, state: AgentState):
     # Extract the final response
     final_response = result["messages"][-1].content
 
-    return {
-        'product_launch_analyst_agent_output': final_response
-    }
+    return {"product_launch_analyst_agent_output": final_response}
 
 
 # def main():

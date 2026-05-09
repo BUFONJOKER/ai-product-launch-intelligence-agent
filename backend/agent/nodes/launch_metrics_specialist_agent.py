@@ -5,11 +5,28 @@
 from agent.state_schema.agent_state import AgentState
 from langchain.agents import create_agent
 from agent.tools.tavily_search import web_search_tool
+
 # from agent.model.initialize_model import load_model
 from langchain.agents.middleware import ToolCallLimitMiddleware
 
+
 def LaunchMetricsSpecialistAgent(model, state: AgentState):
-    """Analyze product launch performance, growth metrics, and market traction."""
+    """Evaluate launch performance metrics and provide actionable insights.
+
+    The function builds a metrics-focused prompt and invokes a LangChain
+    agent that uses web search to collect signals about adoption, media
+    traction, revenue indicators, and other KPIs for the target company.
+
+    Args:
+        model: A LangChain-compatible language model instance.
+        state (AgentState): The current agent state containing inputs
+            such as `company_name`.
+
+    Returns:
+        dict: A dictionary with a single key
+            `'launch_metrics_specialist_agent_output'` containing the
+            agent's textual analysis.
+    """
 
     company_name = state.company_name
 
@@ -112,9 +129,7 @@ def LaunchMetricsSpecialistAgent(model, state: AgentState):
     # Extract final response
     final_response = result["messages"][-1].content
 
-    return {
-        'launch_metrics_specialist_agent_output': final_response
-    }
+    return {"launch_metrics_specialist_agent_output": final_response}
 
 
 # def main():

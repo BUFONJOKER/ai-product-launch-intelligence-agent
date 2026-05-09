@@ -5,11 +5,28 @@
 from agent.state_schema.agent_state import AgentState
 from langchain.agents import create_agent
 from agent.tools.tavily_search import web_search_tool
+
 # from agent.model.initialize_model import load_model
 from langchain.agents.middleware import ToolCallLimitMiddleware
 
+
 def MarketSentimentSpecialistAgent(model, state: AgentState):
-    """Analyze market sentiment and public perception around a product launch."""
+    """Run a market sentiment analysis for a product launch.
+
+    Builds a specialist agent with search tools and prompts focused on
+    extracting positive/negative sentiment, summaries, actionable
+    insights, and sources for the provided `state.company_name`.
+
+    Args:
+        model: A LangChain-compatible language model instance.
+        state (AgentState): The current agent state containing inputs
+            such as `company_name`.
+
+    Returns:
+        dict: A dictionary with a single key
+            `'market_sentiment_specialist_agent_output'` containing the
+            agent's analysis as a string.
+    """
 
     company_name = state.company_name
 
@@ -113,9 +130,7 @@ def MarketSentimentSpecialistAgent(model, state: AgentState):
     # Extract final response
     final_response = result["messages"][-1].content
 
-    return {
-        'market_sentiment_specialist_agent_output': final_response
-    }
+    return {"market_sentiment_specialist_agent_output": final_response}
 
 
 # def main():

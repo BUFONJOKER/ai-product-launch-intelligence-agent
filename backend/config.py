@@ -11,6 +11,7 @@ load_dotenv(dotenv_path=env_path)
 # API Keys
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 DB_URL = os.getenv("DB_URL")
+DB_URL_API = os.getenv("DB_URL_API")
 
 # Other configurations
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
@@ -22,3 +23,6 @@ if not TAVILY_API_KEY:
 
 if not DB_URL:
     raise ValueError("DB_URL is not set in .env file")
+
+if not DB_URL_API:
+    raise ValueError("DB_URL_API is not set in .env file")
