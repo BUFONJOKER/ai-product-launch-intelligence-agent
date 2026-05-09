@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "D:\llm-projects\ai-product-launch-intelligence-agent\backend\agent\main.py", line 4, in <module>
+    from langgraph.checkpoint.postgres import AsyncPostgresSaver
+  File "D:\llm-projects\ai-product-launch-intelligence-agent\backend\.venv\Lib\site-packages\langgraph\checkpoint\postgres\__init__.py", line 20, in <module>
+    from psycopg import Capabilities, Connection, Cursor, Pipeline
+  File "D:\llm-projects\ai-product-launch-intelligence-agent\backend\.venv\Lib\site-packages\psycopg\__init__.py", line 9, in <module>
+    from . import pq  # noqa: F401 import early to stabilize side effects
+    ^^^^^^^^^^^^^^^^
+  File "D:\llm-projects\ai-product-launch-intelligence-agent\backend\.venv\Lib\site-packages\psycopg\pq\__init__.py", line 114, in <module>
+    import_from_libpq()
+  File "D:\llm-projects\ai-product-launch-intelligence-agent\backend\.venv\Lib\site-packages\psycopg\pq\__init__.py", line 108, in import_from_libpq
+    raise ImportError(f"""\
+ImportError: no pq wrapper available.
+Attempts made:
+- couldn't import psycopg 'c' implementation: No module named 'psycopg_c'
+- couldn't import psycopg 'binary' implementation: No module named 'psycopg_binary'
+- couldn't import psycopg 'python' implementation: libpq library not found

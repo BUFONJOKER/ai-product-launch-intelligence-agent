@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 
-def build_workflow(model):
+def build_workflow(model, checkpointer):
 
     graph = StateGraph(AgentState)
 
@@ -56,7 +56,7 @@ def build_workflow(model):
     graph.add_edge("market_sentiment_specialist", END)
     graph.add_edge("launch_metrics_specialist", END)
 
-    workflow = graph.compile()
+    workflow = graph.compile(checkpointer=checkpointer)
 
     return workflow
 
