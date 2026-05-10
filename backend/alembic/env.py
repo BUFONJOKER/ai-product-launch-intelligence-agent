@@ -4,9 +4,9 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
+from api.models.user_data import UserData, UserAgentThread
 from config import DB_URL_API
 from api.database.db_connection import Base
-from api.models.user_data import UserData, UserAgentThread
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config

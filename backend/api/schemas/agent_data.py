@@ -58,6 +58,8 @@ class AgentRun(BaseModel):
     """State container passed between nodes in the agent workflow.
 
     Args:
+        thread_id (str): The unique identifier for the agent run thread.
+        api_key_openai (str): The user's OpenAI API key (will be encrypted before storage).
         company_name (str): Name of the company being analyzed.
         agent_invoke (str): Identifier for which specialist agent to run.
         launch_metrics_specialist_agent_output (str): Output text from the
@@ -72,6 +74,7 @@ class AgentRun(BaseModel):
             current workflow state.
     """
     thread_id: str = Field(description="UUID string for this run")
+    api_key_openai: str = Field(description="The user's OpenAI API key (will be encrypted before storage)")
     company_name: str = Field(description="Name of the company being analyzed")
     agent_invoke: Literal[
         "product_launch_analyst",

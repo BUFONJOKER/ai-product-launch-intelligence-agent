@@ -10,7 +10,7 @@ from config import DB_URL
 from psycopg import AsyncConnection
 
 
-async def run_agent(company_name: str, agent_invoke: str,thread_id: str):
+async def run_agent(company_name: str, agent_invoke: str, thread_id: str):
     """Run the AI product-launch agent workflow asynchronously.
 
     This function prepares an initial agent state, initializes persistence
@@ -30,10 +30,7 @@ async def run_agent(company_name: str, agent_invoke: str,thread_id: str):
             - `agent_run_status` (str): Short status message.
     """
 
-
     config = {"configurable": {"thread_id": thread_id}}
-
-    initial_state = AgentState(company_name=company_name, agent_invoke=agent_invoke)
 
     async with await AsyncConnection.connect(
         DB_URL, autocommit=True, prepare_threshold=None
@@ -46,6 +43,25 @@ async def run_agent(company_name: str, agent_invoke: str,thread_id: str):
         model = load_model()
 
         workflow = build_workflow(model=model, checkpointer=checkpointer)
+
+        # Preserve prior outputs for this thread so only the currently
+        # selected specialist output is replaced on each invocation.
+        previous_state = await workflow.aget_state(config)
+        previous_values = previous_state.values if previous_state else {}
+
+        initial_state = AgentState(
+            company_name=company_name,
+            agent_invoke=agent_invoke,
+            launch_metrics_specialist_agent_output=previous_values.get(
+                "launch_metrics_specialist_agent_output", ""
+            ),
+            market_sentiment_specialist_agent_output=previous_values.get(
+                "market_sentiment_specialist_agent_output", ""
+            ),
+            product_launch_analyst_agent_output=previous_values.get(
+                "product_launch_analyst_agent_output", ""
+            ),
+        )
 
         response = await workflow.ainvoke(initial_state, config=config)
 

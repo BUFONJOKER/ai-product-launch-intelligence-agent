@@ -4,7 +4,7 @@ from api.models.user_data import UserData, UserAgentThread
 from api.schemas.user_data import UserCreate
 from api.password_hash.hash_password import get_password_hash
 from api.password_hash.verify_password import verify_password
-
+from api.api_key_encryption.encrypt_decrypt import encrypt_key, decrypt_key
 
 def create_user(db: Session, user_data: UserCreate):
     """Create a new user in the database.
@@ -21,6 +21,7 @@ def create_user(db: Session, user_data: UserCreate):
     password = user_data.password
     password_hash = get_password_hash(password)
     user.password = password_hash
+    user.api_key_openai = encrypt_key(user_data.api_key_openai)
     db.add(user)
     db.commit()
     db.refresh(user)
@@ -117,6 +118,7 @@ def get_user(db: Session, email: str, password: str):
     return {
         "name": user.name,
         "email": user.email,
+        "api_key_openai": user.api_key_openai,
         "message": "User retrieved successfully",
     }
 
@@ -167,8 +169,10 @@ def add_user_agent_thread(db: Session, email: str, thread_id: str):
     db.commit()
     db.refresh(user)
 
+
     if user.id is None:
         raise Exception("Failed to create user agent thread")
+
 
     return {
         "email": user.email,

@@ -26,23 +26,27 @@ user_router = APIRouter(prefix="/api/users", tags=["users"])
 
 @user_router.post("/login", response_model=GetUserResponse)
 def get_user(get_user: GetUser, session: Session = Depends(get_db)):
-    try:
-        user = user_services.get_user(session, get_user.email, get_user.password)
-        if user is None:
-            raise HTTPException(status_code=401, detail="Invalid email or password")
-        else:
-            access_token = create_access_token(data={"sub": user.email})
+    user = user_services.get_user(session, get_user.email, get_user.password)
+    if user:
+        return user
+    raise HTTPException(status_code=401, detail="Invalid email or password")
+    # try:
+    #     user = user_services.get_user(session, get_user.email, get_user.password)
+    #     if user is None:
+    #         raise HTTPException(status_code=401, detail="Invalid email or password")
+    #     else:
+    #         access_token = create_access_token(data={"sub": user.email})
 
-            return {
-                "access_token": access_token,
-                "token_type": "bearer",
-                "message": "user logged in successfully",
-            }
-    except HTTPException:
-        raise
-    except Exception as exc:
-        session.rollback()
-        raise HTTPException(status_code=500, detail="Unable to login user") from exc
+    #         return {
+    #             "access_token": access_token,
+    #             "token_type": "bearer",
+    #             "message": "user logged in successfully",
+    #         }
+    # except HTTPException:
+    #     raise
+    # except Exception as exc:
+    #     session.rollback()
+    #     raise HTTPException(status_code=500, detail="Unable to login user") from exc
 
 
 @user_router.post("/add_user", response_model=AddUserResponse, status_code=201)
@@ -65,21 +69,28 @@ def add_user(user: UserCreate, session: Session = Depends(get_db)):
 def add_user_agent_thread_id(
     user_agent_output: UserCreateAgentThread, session: Session = Depends(get_db)
 ):
-    try:
-        thread_id = str(uuid.uuid4())
-        return user_services.add_user_agent_thread(
+    thread_id = str(uuid.uuid4())
+    user = user_services.add_user_agent_thread(
             session, user_agent_output.email, thread_id
         )
-    except IntegrityError as exc:
-        session.rollback()
-        raise HTTPException(
-            status_code=409, detail="A user with this thread_id already exist"
-        ) from exc
-    except Exception as exc:
-        session.rollback()
-        raise HTTPException(
-            status_code=500, detail="Unable to create user thread_id"
-        ) from exc
+    if user:
+        return user
+    raise HTTPException(status_code=401, detail="Invalid email or password")
+    # try:
+    #     thread_id = str(uuid.uuid4())
+    #     return user_services.add_user_agent_thread(
+    #         session, user_agent_output.email, user_agent_output.password, thread_id
+    #     )
+    # except IntegrityError as exc:
+    #     session.rollback()
+    #     raise HTTPException(
+    #         status_code=409, detail="A user with this thread_id already exist"
+    #     ) from exc
+    # except Exception as exc:
+    #     session.rollback()
+    #     raise HTTPException(
+    #         status_code=500, detail="Unable to create user thread_id"
+    #     ) from exc
 
 
 @user_router.put("/update_user", response_model=AddUserResponse)

@@ -20,6 +20,7 @@ class UserData(Base):
     email: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
 
+    api_key_openai: Mapped[str] = mapped_column(String, nullable=False)  # Encrypted API key
 
 class UserAgentThread(Base):
     __tablename__ = "user_agent_thread"

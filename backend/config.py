@@ -16,7 +16,7 @@ ACCESS_TOKEN_SECRET_KEY = os.getenv("ACCESS_TOKEN_SECRET_KEY")
 # Other configurations
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 ENV = os.getenv("ENV", "development")
-
+ENCRYPTION_MASTER_KEY = os.getenv("ENCRYPTION_MASTER_KEY")
 # Validate required API keys
 if not TAVILY_API_KEY:
     raise ValueError("TAVILY_API_KEY is not set in .env file")
@@ -29,3 +29,6 @@ if not DB_URL_API:
 
 if not ACCESS_TOKEN_SECRET_KEY:
     raise ValueError("ACCESS_TOKEN is not set in .env file")
+
+if not ENCRYPTION_MASTER_KEY:
+    raise ValueError("ENCRYPTION_MASTER_KEY is not set in .env file")

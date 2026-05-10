@@ -1,7 +1,7 @@
 from langchain_openai import ChatOpenAI
 
 
-def load_model():
+def load_model(api_key_openai):
     """Instantiate and return the language model used by the agents.
 
     The function centralizes creation of the ChatOpenAI model instance
@@ -14,6 +14,6 @@ def load_model():
             using the "gpt-5-nano" model with temperature set to 0).
     """
 
-    model = ChatOpenAI(model="gpt-5-nano", temperature=0, streaming=True)
+    model = ChatOpenAI(model="gpt-5-nano", temperature=0, streaming=True, api_key=api_key_openai)
 
     return model
