@@ -1,7 +1,5 @@
 from typing import Literal
-
 from pydantic import BaseModel, Field
-
 
 class AgentState(BaseModel):
     """State container passed between nodes in the agent workflow.

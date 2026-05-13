@@ -2,7 +2,6 @@ from sqlalchemy import create_engine
 from config import DB_URL_API
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
-
 class Base(DeclarativeBase):
     """Base declarative class for SQLAlchemy models in this project.
 
@@ -17,7 +16,6 @@ class Base(DeclarativeBase):
 engine = create_engine(DB_URL_API)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
 
 def get_db():
     """Provide a transactional database session for FastAPI endpoints.

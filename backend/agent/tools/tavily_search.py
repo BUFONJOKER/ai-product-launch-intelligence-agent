@@ -1,7 +1,6 @@
 from config import TAVILY_API_KEY
 from langchain_tavily import TavilySearch
 
-
 def web_search_tool():
     """Create and return a configured Tavily web-search tool.
 
@@ -21,8 +20,3 @@ def web_search_tool():
     )
 
     return tavily_search_tool
-
-
-# if __name__ == "__main__":
-#     user_input = "Which nation will host icc cricket worlducp 2027? Include only wikipedia sources."
-#     main(user_input)

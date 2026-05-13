@@ -3,42 +3,58 @@ from typing import Literal, Any
 
 
 class AgentRunRequest(BaseModel):
-    """State container passed between nodes in the agent workflow.
+    """Input payload used to start or route an agent workflow run.
 
-    Args:
-        thread_id (str): The unique identifier for the agent run thread.
-        api_key_openai (str): The user's OpenAI API key (will be encrypted before storage).
-        company_name (str): Name of the company being analyzed.
-        agent_invoke (str): Identifier for which specialist agent to run.
-        launch_metrics_specialist_agent_output (str): Output text from the
-            launch metrics specialist agent.
-        market_sentiment_specialist_agent_output (str): Output text from the
-            market sentiment specialist agent.
-        product_launch_analyst_agent_output (str): Output text from the
-            product launch analyst agent.
-
-    Returns:
-        AgentState: A validated Pydantic model instance representing the
-            current workflow state.
+    Attributes:
+        thread_id: UUID string that identifies the workflow run.
+        api_key_openai: The user's OpenAI API key, which is encrypted before storage.
+        company_name: The company name that will be analyzed by the workflow.
+        agent_invoke: The specialist agent that should handle this request.
     """
-    thread_id: str = Field(description="UUID string for this run")
-    api_key_openai: str = Field(description="The user's OpenAI API key (will be encrypted before storage)")
-    company_name: str = Field(description="Name of the company being analyzed")
+
+    thread_id: str = Field(description="UUID string that identifies this workflow run")
+    api_key_openai: str = Field(
+        description="The user's OpenAI API key, encrypted before storage"
+    )
+    company_name: str = Field(description="The company name being analyzed")
     agent_invoke: Literal[
         "product_launch_analyst",
         "market_sentiment_specialist",
         "launch_metrics_specialist",
-    ] = Field(
-        description="Identifier of which specialist agent to run (e.g., 'product_launch_analyst', 'market_sentiment_specialist', 'launch_metrics_specialist')"
-    )
+    ] = Field(description="Identifier of the specialist agent to run")
+
 
 class GetAgentResponse(BaseModel):
-    thread_id: str = Field(description="UUID string for this run")
-    launch_metrics_specialist_agent_output: Any = Field(description="Output from the launch metrics specialist agent")
-    market_sentiment_specialist_agent_output: Any = Field(description="Output from the market sentiment specialist agent")
-    product_launch_analyst_agent_output: Any = Field(description="Output from the product launch analyst agent")
+    """Aggregated workflow outputs returned to the caller.
+
+    Attributes:
+        thread_id: UUID string that identifies the workflow run.
+        launch_metrics_specialist_agent_output: Output produced by the launch metrics specialist agent.
+        market_sentiment_specialist_agent_output: Output produced by the market sentiment specialist agent.
+        product_launch_analyst_agent_output: Output produced by the product launch analyst agent.
+    """
+
+    thread_id: str = Field(description="UUID string that identifies this workflow run")
+    launch_metrics_specialist_agent_output: Any = Field(
+        description="Output produced by the launch metrics specialist agent"
+    )
+    market_sentiment_specialist_agent_output: Any = Field(
+        description="Output produced by the market sentiment specialist agent"
+    )
+    product_launch_analyst_agent_output: Any = Field(
+        description="Output produced by the product launch analyst agent"
+    )
 
 
 class GetAgentRequest(BaseModel):
-    thread_id: str = Field(description="UUID string for this run")
-    api_key_openai: str = Field(description="The user's OpenAI API key (will be encrypted before storage)")
+    """Request payload used to fetch the current agent workflow state.
+
+    Attributes:
+        thread_id: UUID string that identifies the workflow run.
+        api_key_openai: The user's OpenAI API key, which is encrypted before storage.
+    """
+
+    thread_id: str = Field(description="UUID string that identifies this workflow run")
+    api_key_openai: str = Field(
+        description="The user's OpenAI API key, encrypted before storage"
+    )

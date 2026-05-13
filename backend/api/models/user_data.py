@@ -2,7 +2,6 @@ from api.database.db_connection import Base
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import mapped_column, Mapped
 
-
 class UserData(Base):
     __tablename__ = "user_data"
 

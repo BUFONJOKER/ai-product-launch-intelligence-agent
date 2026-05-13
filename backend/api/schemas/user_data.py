@@ -18,6 +18,24 @@ class SignUpRequest(BaseModel):
     password: str = Field(..., description="The user's password")
     api_key_openai: str = Field(..., description="The user's OpenAI API key (will be encrypted before storage)")
 
+class SignUpResponse(BaseModel):
+    """Schema for user API responses (output payload).
+
+    Returned by GET/POST/PUT endpoints. Excludes the password field for
+    security—never expose password hashes in API responses.
+
+    Attributes:
+        id (int): Unique user identifier.
+        name (str): User display name.
+        email (EmailStr): User email address.
+    """
+
+    model_config = ConfigDict(from_attributes=True)
+
+    name: str = Field(..., description="The user's display name")
+    email: EmailStr = Field(..., description="The user's email address")
+    message: str = Field(default="", description="A message confirming user creation")
+
 class LoginRequest(BaseModel):
     """Schema for creating a new user (input payload).
 
@@ -51,44 +69,6 @@ class LoginResponse(BaseModel):
     email: EmailStr = Field(..., description="The user's email address")
     api_key_openai: str = Field(..., description="The user's OpenAI API key (will be encrypted before storage)")
     message: str = Field(default="", description="A message confirming user retrieval")
-
-
-class UserResponse(BaseModel):
-    """Schema for user API responses (output payload).
-
-    Returned by GET/POST/PUT endpoints. Excludes the password field for
-    security—never expose password hashes in API responses.
-
-    Attributes:
-        id (int): Unique user identifier.
-        name (str): User display name.
-        email (EmailStr): User email address.
-    """
-
-    model_config = ConfigDict(from_attributes=True)
-
-    id: int = Field(..., description="The unique identifier of the user")
-    name: str = Field(..., description="The user's display name")
-    email: EmailStr = Field(..., description="The user's email address")
-
-
-class SignUpResponse(BaseModel):
-    """Schema for user API responses (output payload).
-
-    Returned by GET/POST/PUT endpoints. Excludes the password field for
-    security—never expose password hashes in API responses.
-
-    Attributes:
-        id (int): Unique user identifier.
-        name (str): User display name.
-        email (EmailStr): User email address.
-    """
-
-    model_config = ConfigDict(from_attributes=True)
-
-    name: str = Field(..., description="The user's display name")
-    email: EmailStr = Field(..., description="The user's email address")
-    message: str = Field(default="", description="A message confirming user creation")
 
 
 class CreateThreadRequest(BaseModel):

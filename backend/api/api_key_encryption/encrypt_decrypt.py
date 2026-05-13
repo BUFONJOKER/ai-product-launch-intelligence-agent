@@ -1,7 +1,5 @@
-import os
 from cryptography.fernet import Fernet
 from config import ENCRYPTION_MASTER_KEY
-
 
 MASTER_KEY = ENCRYPTION_MASTER_KEY
 cipher_suite = Fernet(MASTER_KEY)
