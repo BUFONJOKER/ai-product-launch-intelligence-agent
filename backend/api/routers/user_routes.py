@@ -1,13 +1,12 @@
 from typing import List
 from api.services import user_services
 from api.schemas.user_data import (
-    UserCreate,
-    UserResponse,
-    AddUserResponse,
-    GetUser,
-    GetUserResponse,
-    UserAgentThreadResponse,
-    UserCreateAgentThread,
+    LoginRequest,
+    LoginResponse,
+    SignUpRequest,
+    SignUpResponse,
+    CreateThreadRequest,
+    CreateThreadResponse,
 )
 from api.database.db_connection import get_db
 from sqlalchemy.orm import Session
@@ -24,14 +23,22 @@ user_router = APIRouter(prefix="/api/users", tags=["users"])
 #     return user_services.get_users(session)
 
 
-@user_router.post("/login", response_model=GetUserResponse)
-def get_user(get_user: GetUser, session: Session = Depends(get_db)):
-    user = user_services.get_user(session, get_user.email, get_user.password)
+@user_router.post("/login", response_model=LoginResponse)
+def get_user(request: LoginRequest, session: Session = Depends(get_db)):
+    user = user_services.get_user(session, request.email, request.password)
     if user:
-        return user
+        access_token = create_access_token(data={"sub": user['email']})
+        return {
+            "access_token": access_token,
+            "token_type": "bearer",
+            "name": user['name'],
+            "email": user['email'],
+            "api_key_openai": user['api_key_openai'],
+            "message": "User retrieved successfully",
+        }
     raise HTTPException(status_code=401, detail="Invalid email or password")
     # try:
-    #     user = user_services.get_user(session, get_user.email, get_user.password)
+    #     user = user_services.get_user(session, request.email, request.password)
     #     if user is None:
     #         raise HTTPException(status_code=401, detail="Invalid email or password")
     #     else:
@@ -49,10 +56,10 @@ def get_user(get_user: GetUser, session: Session = Depends(get_db)):
     #     raise HTTPException(status_code=500, detail="Unable to login user") from exc
 
 
-@user_router.post("/add_user", response_model=AddUserResponse, status_code=201)
-def add_user(user: UserCreate, session: Session = Depends(get_db)):
+@user_router.post("/signup", response_model=SignUpResponse, status_code=201)
+def add_user(request: SignUpRequest, session: Session = Depends(get_db)):
     try:
-        return user_services.add_user(session, user)
+        return user_services.add_user(session, request)
     except IntegrityError as exc:
         session.rollback()
         raise HTTPException(
@@ -64,15 +71,13 @@ def add_user(user: UserCreate, session: Session = Depends(get_db)):
 
 
 @user_router.post(
-    "/add_user_agent_thread_id", response_model=UserAgentThreadResponse, status_code=201
+    "/add_user_agent_thread_id", response_model=CreateThreadResponse, status_code=201
 )
 def add_user_agent_thread_id(
-    user_agent_output: UserCreateAgentThread, session: Session = Depends(get_db)
+    request: CreateThreadRequest, session: Session = Depends(get_db)
 ):
     thread_id = str(uuid.uuid4())
-    user = user_services.add_user_agent_thread(
-            session, user_agent_output.email, thread_id
-        )
+    user = user_services.add_user_agent_thread(session, request.email, thread_id)
     if user:
         return user
     raise HTTPException(status_code=401, detail="Invalid email or password")
@@ -93,8 +98,8 @@ def add_user_agent_thread_id(
     #     ) from exc
 
 
-@user_router.put("/update_user", response_model=AddUserResponse)
-def update_user(user: UserCreate, session: Session = Depends(get_db)):
+@user_router.put("/update_user", response_model=SignUpResponse)
+def update_user(user: SignUpRequest, session: Session = Depends(get_db)):
     try:
         updated_user = user_services.update_user(session, user)
         if updated_user is None:
@@ -113,7 +118,7 @@ def update_user(user: UserCreate, session: Session = Depends(get_db)):
 
 
 @user_router.delete("/delete_user")
-def delete_user(user: UserCreate, session: Session = Depends(get_db)):
+def delete_user(user: SignUpRequest, session: Session = Depends(get_db)):
     try:
         deleted_user = user_services.delete_user(session, user)
         if deleted_user is None:

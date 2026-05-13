@@ -1,12 +1,12 @@
 from sqlalchemy.orm import Session
 
 from api.models.user_data import UserData, UserAgentThread
-from api.schemas.user_data import UserCreate
+from api.schemas.user_data import SignUpRequest
 from api.password_hash.hash_password import get_password_hash
 from api.password_hash.verify_password import verify_password
 from api.api_key_encryption.encrypt_decrypt import encrypt_key, decrypt_key
 
-def create_user(db: Session, user_data: UserCreate):
+def create_user(db: Session, user_data: SignUpRequest):
     """Create a new user in the database.
 
     Args:
@@ -37,7 +37,7 @@ def create_user(db: Session, user_data: UserCreate):
     }
 
 
-def update_user(db: Session, user_data: UserCreate):
+def update_user(db: Session, user_data: SignUpRequest):
     """Update an existing user's fields.
 
     Args:
@@ -71,7 +71,7 @@ def update_user(db: Session, user_data: UserCreate):
     }
 
 
-def delete_user(db: Session, user_data: UserCreate):
+def delete_user(db: Session, user_data: SignUpRequest):
     """Delete a user by ID.
 
     Args:
@@ -136,7 +136,7 @@ def get_users(db: Session):
     return db.query(UserData).all()
 
 
-def add_user(db: Session, user_data: UserCreate):
+def add_user(db: Session, user_data: SignUpRequest):
     """Create a new user in the database (alias for create_user).
 
     Args:
