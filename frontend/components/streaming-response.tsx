@@ -13,6 +13,7 @@ interface StreamingResponseProps {
   threadId: string | null;
   elapsedMs: number;
   error?: string | null;
+  companyName?: string;
   finalResponse?: unknown;
   selectedAgent: AgentInvoke;
 }
@@ -54,7 +55,7 @@ function getAgentHeading(selectedAgent: AgentInvoke): string {
   return headingMap[selectedAgent];
 }
 
-export function StreamingResponse({ status, events, threadId, elapsedMs, error, finalResponse, selectedAgent }: StreamingResponseProps) {
+export function StreamingResponse({ status, events, threadId, elapsedMs, error, finalResponse, selectedAgent, companyName }: StreamingResponseProps) {
   const [visibleText, setVisibleText] = useState("");
   const text = useMemo(() => getSelectedAgentOutput(finalResponse, selectedAgent), [finalResponse, selectedAgent]);
   const isRunning = status === "starting" || status === "streaming" || status === "loading-response";
@@ -71,6 +72,27 @@ export function StreamingResponse({ status, events, threadId, elapsedMs, error, 
 
   return (
     <section className="glass-panel rounded-[2rem] p-5 lg:p-6">
+      {status === "complete" && companyName && (
+        <div className="mb-6 pb-6 border-b border-white/10">
+          <div className="flex flex-col gap-2 lg:gap-3">
+            <div className="flex flex-wrap items-baseline gap-2 lg:gap-3">
+              <h2 className="text-3xl lg:text-4xl font-bold text-white">{companyName}</h2>
+            </div>
+            <div className="flex flex-wrap items-center gap-2 lg:gap-3">
+              <span className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-500/20 to-cyan-400/10 border border-cyan-400/30 px-4 py-2 text-sm font-semibold text-cyan-100">
+                <span className="h-2 w-2 rounded-full bg-cyan-400" />
+                {selectedAgent.replace(/_/g, " ").toUpperCase()}
+              </span>
+              <span className="text-sm font-medium text-slate-300">{getAgentHeading(selectedAgent)}</span>
+            </div>
+          </div>
+          <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-slate-400">
+            <span>Generated: {new Date().toLocaleString()}</span>
+            <span>Duration: {Math.round(elapsedMs / 1000)}s</span>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Live stream</p>

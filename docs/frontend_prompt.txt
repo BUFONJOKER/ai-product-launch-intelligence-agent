@@ -1,4 +1,4 @@
-Create a premium, modern, futuristic, and visually mesmerizing Next.js frontend UI for an AI-powered product launch intelligence platform. Before building any UI, thoroughly analyze the entire backend folder structure, API architecture, routes, schemas, request/response models, streaming implementation, authentication flow, thread management logic, and agent execution flow to fully understand how the backend works and ensure the frontend integrates perfectly with it.
+1 - Create a premium, modern, futuristic, and visually mesmerizing Next.js frontend UI for an AI-powered product launch intelligence platform. Before building any UI, thoroughly analyze the entire backend folder structure, API architecture, routes, schemas, request/response models, streaming implementation, authentication flow, thread management logic, and agent execution flow to fully understand how the backend works and ensure the frontend integrates perfectly with it.
 
 The system should intelligently inspect:
 
@@ -308,3 +308,120 @@ CODE QUALITY REQUIREMENTS
 * Maintainable codebase
 
 The final application should feel like a world-class AI SaaS platform with cinematic polish, mesmerizing UI, smooth interactions, intelligent backend integration, and real-time AI streaming experience.
+
+
+
+
+2 - Also improve the thread and response experience by making the UI company-centric instead of thread-centric.
+
+========================================
+THREAD HISTORY IMPROVEMENTS
+===========================
+
+In the sidebar thread history:
+
+* Do NOT display generic thread IDs or thread names
+* Instead, display:
+
+  * Company Name
+  * Product Name associated with that thread
+
+Example:
+Instead of:
+
+* thread_12345
+
+Show:
+
+* Apple — Vision Pro
+* OpenAI — ChatGPT Enterprise
+* Tesla — Cybertruck
+
+Requirements:
+
+* Thread cards should feel like intelligent project/workspace cards
+* Display company + product elegantly with:
+
+  * Company logo/avatar placeholder
+  * Product subtitle
+  * Timestamp
+  * Active state indicator
+* Add hover animations and modern card interactions
+* Make thread history visually clean and easy to scan
+
+========================================
+INPUT EXPERIENCE IMPROVEMENTS
+=============================
+
+Update the main dashboard input field.
+
+Instead of placeholder text:
+
+* “Enter Company Name”
+
+Use:
+
+* “Enter Company & Product Name”
+
+Examples:
+
+* Apple Vision Pro
+* Tesla Cybertruck
+* OpenAI ChatGPT Enterprise
+
+Requirements:
+
+* Larger premium AI-style input field
+* Smart placeholder animations
+* Elegant focus glow effects
+* Input should clearly communicate that both company and product are required
+
+========================================
+AGENT RESPONSE UI IMPROVEMENTS
+==============================
+
+In the AI response section:
+
+* Always display:
+
+  * Company Name
+  * Product Name
+  * Selected Agent Name
+
+At the top of every response card show:
+
+* Company/Product header
+* Agent badge
+* Timestamp
+* Run duration
+
+Example Header:
+Apple — Vision Pro
+Agent: product_launch_analyst
+
+Requirements:
+
+* Response cards should feel like premium AI-generated reports
+* Add beautiful typography hierarchy
+* Add modern metadata chips/badges
+* Include elegant separators and layouts
+* Use markdown rendering with rich formatting
+* Make reports highly readable and visually polished
+
+========================================
+OVERALL UX GOAL
+===============
+
+The platform should feel like an AI workspace for analyzing real-world product launches, where every thread represents:
+
+* A Company
+* Its Product
+* Associated AI analysis
+
+The UI should emphasize:
+
+* Company identity
+* Product identity
+* AI agent analysis context
+
+instead of exposing raw technical thread IDs to users.

@@ -1,4 +1,5 @@
 import { UserAuthState, WorkspaceHistoryEntry, WorkspaceSnapshot } from "@/lib/types";
+import { ThreadMetadata } from "@/lib/types";
 
 const AUTH_KEY = "pla-auth";
 const WORKSPACE_HISTORY_KEY = "pla-workspace-history";
@@ -84,4 +85,36 @@ export function saveWorkspaceSnapshot(snapshot: WorkspaceSnapshot) {
 
 export function clearWorkspaceSnapshot() {
   window.localStorage.removeItem(WORKSPACE_SNAPSHOT_KEY);
+}
+
+const THREAD_METADATA_KEY = "pla-thread-metadata";
+
+export function loadThreadMetadata(): ThreadMetadata[] {
+  if (typeof window === "undefined") {
+    return [];
+  }
+
+  const raw = window.localStorage.getItem(THREAD_METADATA_KEY);
+
+  if (!raw) {
+    return [];
+  }
+
+  try {
+    const parsed = JSON.parse(raw) as ThreadMetadata[];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveThreadMetadata(metadata: ThreadMetadata) {
+  const current = loadThreadMetadata();
+  const next = [metadata, ...current.filter((item) => item.thread_id !== metadata.thread_id)];
+  window.localStorage.setItem(THREAD_METADATA_KEY, JSON.stringify(next));
+}
+
+export function getThreadMetadata(threadId: string): ThreadMetadata | null {
+  const all = loadThreadMetadata();
+  return all.find((m) => m.thread_id === threadId) ?? null;
 }

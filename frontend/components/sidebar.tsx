@@ -2,7 +2,7 @@
 
 import { Search, Plus, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
-import { ThreadRecord, WorkspaceHistoryEntry } from "@/lib/types";
+import { ThreadRecord } from "@/lib/types";
 import { ThreadList } from "@/components/thread-list";
 
 interface SidebarProps {
@@ -16,8 +16,6 @@ interface SidebarProps {
   onSelectThread: (threadId: string) => void;
   onLogout: () => void;
   loading?: boolean;
-  historyEntries: WorkspaceHistoryEntry[];
-  onSelectHistory: (threadId: string) => void;
 }
 
 export function Sidebar({
@@ -31,8 +29,6 @@ export function Sidebar({
   onSelectThread,
   onLogout,
   loading,
-  historyEntries,
-  onSelectHistory,
 }: SidebarProps) {
   const filteredThreads = threads.filter((thread) => thread.thread_id.includes(searchQuery) || thread.email.includes(searchQuery));
 
@@ -67,11 +63,11 @@ export function Sidebar({
         <button
           type="button"
           onClick={onCreateThread}
-          className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-4 py-3 text-sm font-medium text-slate-950 transition-transform hover:scale-[1.01]"
+             className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 to-cyan-300 px-4 py-3 text-sm font-semibold text-slate-950 transition-all hover:shadow-[0_8px_20px_rgba(34,211,238,0.3)] hover:scale-[1.02]"
           disabled={loading}
         >
           <Plus className="h-4 w-4" />
-          New Thread
+             New Project
         </button>
       </div>
 
@@ -80,14 +76,14 @@ export function Sidebar({
         <input
           value={searchQuery}
           onChange={(event) => onSearchChange(event.target.value)}
-          placeholder="Search threads"
+             placeholder="Search companies..."
           className="w-full bg-transparent outline-none placeholder:text-slate-500"
         />
       </label>
 
       <div className="mt-4 flex-1 overflow-hidden rounded-[1.5rem] border border-white/8 bg-white/4 p-3">
         <div className="mb-3 flex items-center justify-between px-1">
-          <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Thread history</p>
+          <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Launch projects</p>
           <span className="text-xs text-slate-500">{filteredThreads.length}</span>
         </div>
         <div className="h-[calc(100%-2rem)] overflow-y-auto pr-1">
@@ -95,37 +91,7 @@ export function Sidebar({
         </div>
       </div>
 
-      <div className="mt-4 rounded-[1.5rem] border border-white/8 bg-white/4 p-3">
-        <div className="mb-3 flex items-center justify-between px-1">
-          <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Workspace history</p>
-          <span className="text-xs text-slate-500">{historyEntries.length}</span>
-        </div>
-        <div className="max-h-64 space-y-2 overflow-y-auto pr-1">
-          {historyEntries.length === 0 ? (
-            <p className="rounded-2xl border border-dashed border-white/10 px-4 py-6 text-sm text-slate-400">
-              Completed workspaces will appear here and persist across refreshes.
-            </p>
-          ) : (
-            historyEntries.map((entry) => (
-              <button
-                key={entry.id}
-                type="button"
-                onClick={() => onSelectHistory(entry.thread_id)}
-                className="flex w-full items-start justify-between rounded-2xl border border-white/8 bg-[#081227] px-4 py-3 text-left transition hover:bg-white/8"
-              >
-                <div>
-                  <p className="text-sm font-medium text-white">{entry.company_name}</p>
-                  <p className="mt-1 text-xs text-slate-400">{entry.agent_invoke}</p>
-                  <p className="mt-1 text-[11px] text-slate-500">{entry.thread_id.slice(0, 8)}…</p>
-                </div>
-                <span className="rounded-full bg-white/8 px-2 py-1 text-[10px] uppercase tracking-[0.2em] text-slate-300">
-                  {entry.status}
-                </span>
-              </button>
-            ))
-          )}
-        </div>
-      </div>
+
     </aside>
   );
 }

@@ -21,7 +21,7 @@ export function AnimatedButton({ className, tone = "primary", ...props }: Animat
       whileTap={{ scale: 0.98 }}
       transition={{ type: "spring", stiffness: 500, damping: 30 }}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-60",
+        "inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-all duration-300 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60",
         tones[tone],
         className,
       )}

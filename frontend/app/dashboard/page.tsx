@@ -288,8 +288,6 @@ export default function DashboardPage() {
           onSelectThread={restoreThread}
           onLogout={handleLogout}
           loading={threadsLoading}
-          historyEntries={workspaceHistory}
-          onSelectHistory={restoreThread}
         />
 
         <section className="flex flex-col gap-4">
