@@ -1,5 +1,5 @@
 # =========================================
-# 🔹 ROOT LEVEL
+# 🔹 GLOBAL / SYSTEM RULES (Any Folder)
 # =========================================
 
 # OS
@@ -10,84 +10,89 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+*.tsbuildinfo
 
-# Logs
+# Logs & Debugging
 *.log
 npm-debug.log*
 yarn-debug.log*
+yarn-error.log*
 pnpm-debug.log*
+.pnpm-debug.log*
 
-# Secrets (CRITICAL)
+# Secrets & Security (CRITICAL)
 .env
+.env*
 .env.*
 !.env.example
-
-# Media (ignore only root mp4 files)
-*.mp4
-
-# Misc
 *.pem
 
-# =========================================
-# 🔹 BACKEND (FastAPI / Python)
-# =========================================
-# iclude pycache in any folder or subfolder of backend, but exclude pycache in frontend
-backend/**/__pycache__/
-backend/**/*.py[cod]
-backend/.venv/
-backend/env/
-backend/venv/
-backend/ENV/
-
-backend/__pycache__/
-backend/*.py[cod]
-backend/*$py.class
-
-backend/.pytest_cache/
-backend/.ipynb_checkpoints/
-
-backend/*.egg-info/
-backend/dist/
-backend/build/
-
-backend/generated_images/
-
-# Python version file (optional to ignore)
-backend/.python-version
+# Media (Ignore only root level MP4s, or globally if preferred)
+/*.mp4
 
 # =========================================
-# 🔹 FRONTEND (Next.js / pnpm)
+# 🔹 PYTHON / BACKEND RULES (Any Folder)
 # =========================================
 
-frontend/node_modules/
-frontend/.next/
-frontend/out/
-frontend/build/
+# Virtual Environments
+.venv/
+env/
+venv/
+ENV/
+.python-version
 
-# Next.js types (auto-generated)
-frontend/next-env.d.ts
+# Python Compiled Files (Global)
+*.py[cod]
+*$py.class
 
-# Env files (frontend-specific)
-frontend/.env*
-!frontend/.env.example
+# Pycache Rule: Ignore everywhere, but explicitly allow if it's inside a frontend folder
+**/__pycache__/
+!frontend/**/__pycache__/
+
+# Testing & Notebooks
+.pytest_cache/
+.ipynb_checkpoints/
+coverage/
+/coverage
+
+# Build & Distribution
+*.egg-info/
+dist/
+build/
+/build
+generated_images/
 
 # =========================================
-# 🔹 PACKAGE MANAGERS
+# 🔹 JAVASCRIPT / FRONTEND RULES (Any Folder)
 # =========================================
 
+# Dependencies
+node_modules/
+/node_modules
+
+# Next.js / Build Artifacts
+.next/
+/.next/
+out/
+/out/
+next-env.d.ts
+
+# Package Managers (Yarn/PNP/Pnpm)
 .pnp
 .pnp.js
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
 # =========================================
-# 🔹 DEPLOYMENT
+# 🔹 DEPLOYMENT & CLOUD
 # =========================================
 
 .vercel
-coverage/
 
-# =========================================
-# 🔹 OPTIONAL (uncomment if needed)
-# =========================================
-
-# frontend/public/uploads
-# backend/data
+# typescript
+*.tsbuildinfo
+next-env.d.ts

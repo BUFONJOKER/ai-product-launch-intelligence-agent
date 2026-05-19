@@ -1,0 +1,310 @@
+Create a premium, modern, futuristic, and visually mesmerizing Next.js frontend UI for an AI-powered product launch intelligence platform. Before building any UI, thoroughly analyze the entire backend folder structure, API architecture, routes, schemas, request/response models, streaming implementation, authentication flow, thread management logic, and agent execution flow to fully understand how the backend works and ensure the frontend integrates perfectly with it.
+
+The system should intelligently inspect:
+
+* FastAPI routes
+* Pydantic schemas
+* Request/response payloads
+* Authentication logic
+* Thread creation flow
+* SSE streaming implementation
+* Agent execution endpoints
+* Database models
+* Error response structures
+* Status codes
+* Async workflows
+* LangGraph orchestration if present
+* Folder/module relationships
+* API naming conventions
+* Existing validation logic
+
+After analyzing the backend completely:
+
+* Design frontend architecture around actual backend behavior
+* Ensure request payloads exactly match backend schemas
+* Handle all backend edge cases gracefully
+* Create scalable typed API services
+* Generate accurate TypeScript types/interfaces from backend responses
+* Respect backend async and streaming patterns
+* Create reusable hooks for backend communication
+* Ensure production-level integration quality
+
+========================================
+TECH STACK & ARCHITECTURE
+=========================
+
+Build the frontend using:
+
+* Next.js App Router
+* TypeScript
+* Tailwind CSS
+* Framer Motion
+* React Hook Form
+* Zod validation
+* Axios or Fetch API
+* Server-Sent Events (SSE)
+* Modern component-based architecture
+
+Requirements:
+
+* Fully responsive
+* Dark mode default
+* Glassmorphism UI
+* Elegant animations
+* Clean folder structure
+* Reusable components
+* Type-safe APIs
+* Loading states
+* Toast notifications
+* Skeleton loaders
+* Streaming UI
+* Modern SaaS aesthetic inspired by:
+
+  * Linear
+  * Vercel
+  * Notion AI
+  * Perplexity
+  * ChatGPT
+
+========================================
+AUTHENTICATION FLOW
+===================
+
+Create a stunning Signup Page with:
+
+* Name field
+* Email field
+* Password field
+* OpenAI API Key field
+* “Create Account” button
+
+UI/UX Requirements:
+
+* Animated gradient background
+* Centered glassmorphism card
+* Floating labels
+* Elegant focus states
+* Password visibility toggle
+* Micro interactions
+* Smooth animations
+* Responsive layout
+
+Behavior:
+
+* Validate fields using Zod + React Hook Form
+* Show inline field validation
+* Show toast notifications for success/errors
+* Disable button during loading
+* Show animated loading spinner
+* On successful validation:
+
+  * Send POST request to:
+    /api/users/signup
+* On success:
+
+  * Show success state
+* On failure:
+
+  * Show backend error messages gracefully
+
+========================================
+LOGIN PAGE
+==========
+
+Create a premium Login Page with:
+
+* Email field
+* Password field
+* Login button
+
+Behavior:
+
+* Validate fields before submission
+* POST request to:
+  /api/users/login
+* If successful:
+
+  * Store user data in localStorage
+  * Redirect to /dashboard
+  * Show success toast
+* If failed:
+
+  * Show backend error messages properly
+
+UI Requirements:
+
+* Same premium design system
+* Smooth transitions
+* Elegant animations
+* Polished UX
+
+========================================
+DASHBOARD PAGE
+==============
+
+Create a cinematic AI dashboard experience.
+
+---
+
+## SIDEBAR
+
+Include:
+
+* User profile section
+* Search threads input
+* New Thread button
+* Scrollable thread history
+* Active thread states
+* Smooth sidebar animations
+
+Fetch threads using:
+GET /api/users/get_user_threads/{email}
+
+Requirements:
+
+* Get email from localStorage
+* Display all associated threads
+* Clicking a thread loads the conversation/workspace
+
+========================================
+NEW THREAD EXPERIENCE
+=====================
+
+When “New Thread” is clicked:
+
+* Create a clean AI workspace
+* Show large company name input
+* Show animated AI-themed empty state
+* Elegant onboarding feel
+
+========================================
+AI AGENT TABS
+=============
+
+Create 3 beautiful AI agent cards/tabs:
+
+1. launch_metrics_specialist
+   Description:
+   Analyzes launch KPIs, growth metrics, and performance trends.
+
+2. market_sentiment_specialist
+   Description:
+   Analyzes social sentiment, audience reactions, and market perception.
+
+3. product_launch_analyst
+   Description:
+   Provides strategic launch analysis, recommendations, and competitor insights.
+
+Each card should contain:
+
+* Agent icon
+* Name
+* Description
+* Hover animations
+* Selected state
+* Start Agent button
+
+========================================
+START AGENT FLOW
+================
+
+When “Start Agent” is clicked:
+
+* Send POST request to:
+  /api/agent_runs/start_agent
+
+Payload:
+{
+"thread_id": "string",
+"api_key_openai": "string",
+"company_name": "string",
+"agent_invoke": "agent_name"
+}
+
+Requirements:
+
+* Retrieve api_key_openai from localStorage
+* Start loading state
+* Start animated timer
+* Open streaming response panel
+* Handle backend async events properly
+
+========================================
+REAL-TIME STREAMING UI
+======================
+
+Implement premium real-time SSE streaming experience:
+
+* Token-by-token rendering
+* Typing animation
+* Auto-scroll
+* Streaming cursor
+* Live thinking indicators
+* Markdown rendering
+* Syntax highlighting
+* Rich formatted AI responses
+
+Design inspiration:
+
+* ChatGPT
+* Claude
+* Perplexity
+* Vercel AI SDK demos
+
+========================================
+AGENT COMPLETION FLOW
+=====================
+
+When streaming finishes:
+
+* Automatically call:
+  /api/agent_runs/get_agent_response
+
+Using:
+
+* thread_id
+
+Then:
+
+* Render final polished response
+* Stop timer
+* Save/display thread history
+* Show completed status
+
+========================================
+COMPONENTS TO BUILD
+===================
+
+Build reusable modern components:
+
+* AuthCard
+* GradientBackground
+* Sidebar
+* ThreadList
+* AgentCard
+* StreamingResponse
+* TimerBadge
+* ToastProvider
+* EmptyState
+* LoadingSkeleton
+* AnimatedButton
+* AIResponseCard
+* MarkdownRenderer
+* SSEStatusIndicator
+
+========================================
+CODE QUALITY REQUIREMENTS
+=========================
+
+* Production-ready architecture
+* Clean scalable folder structure
+* Reusable hooks
+* Proper API abstraction
+* Strong TypeScript typing
+* Backend-aware frontend design
+* Graceful error handling
+* Optimized rendering
+* Accessible UI patterns
+* Maintainable codebase
+
+The final application should feel like a world-class AI SaaS platform with cinematic polish, mesmerizing UI, smooth interactions, intelligent backend integration, and real-time AI streaming experience.
