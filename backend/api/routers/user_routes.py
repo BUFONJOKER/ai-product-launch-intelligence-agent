@@ -64,6 +64,31 @@ def get_user(request: LoginRequest, session: Session = Depends(get_db)):
         ) from exc
 
 
+@user_router.get("/get_user_threads/{email}")
+def get_user_threads(email: str, session: Session = Depends(get_db)):
+    """Retrieve all threads associated with a specific user.
+
+    Args:
+        email (str): The email address of the user whose threads are to be retrieved.
+        session (Session): SQLAlchemy database session provided by dependency injection.
+
+    Returns:
+        List[Thread]: A list of threads associated with the specified user.
+
+    Raises:
+        HTTPException: 404 status code if no threads are found for the specified user.
+    """
+
+    try:
+        threads = user_services.get_user_threads(session, email)
+        if threads is not None:
+            return threads
+        raise HTTPException(
+            status_code=404, detail="No threads found for the specified user."
+        )
+    except HTTPException:
+        raise
+
 @user_router.post("/signup", response_model=SignUpResponse, status_code=201)
 def add_user(request: SignUpRequest, session: Session = Depends(get_db)):
     """Create a new user account with credentials and OpenAI API key.

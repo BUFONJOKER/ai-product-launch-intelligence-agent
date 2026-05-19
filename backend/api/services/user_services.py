@@ -123,17 +123,31 @@ def get_user(db: Session, email: str, password: str):
     }
 
 
-def get_users(db: Session):
-    """Retrieve all users from the database.
+def get_user_threads(db: Session, email: str):
+    """Retrieve all threads associated with a specific user.
 
     Args:
         db (Session): SQLAlchemy session.
+        email (str): The email address of the user whose threads are to be retrieved.
 
     Returns:
-        list[UserData]: List of all user ORM instances.
-    """
+        List[Thread]: A list of threads associated with the specified user.
 
-    return db.query(UserData).all()
+    Raises:
+        HTTPException: 404 status code if no threads are found for the specified user.
+    """
+    threads = db.query(UserAgentThread).filter(UserAgentThread.email == email).all()
+
+    if not threads:
+        return 'No threads found for the specified user'
+
+    return [
+        {
+            "email": thread.email,
+            "thread_id": thread.thread_id,
+        }
+        for thread in threads
+    ]
 
 
 def add_user(db: Session, user_data: SignUpRequest):

@@ -4,8 +4,22 @@ from api.routers.user_routes import user_router
 from api.routers.agent_run_routes import agent_run_router
 import uvicorn
 from config import DEBUG
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(debug=DEBUG)
+
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(user_router)
 app.include_router(agent_run_router)
