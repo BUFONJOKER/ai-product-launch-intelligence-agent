@@ -1,0 +1,31 @@
+# Node modules and Next build output
+node_modules/
+.next/
+out/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env and local settings
+.env.local
+.env.*.local
+
+# VCS and editor
+.git/
+.gitignore
+.vscode/
+.idea/
+
+# Tests and coverage
+coverage/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile*
+.dockerignore
