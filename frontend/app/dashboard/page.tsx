@@ -166,7 +166,7 @@ export default function DashboardPage() {
       setCompanyName("");
       setWorkspaceStatus("idle");
       clearWorkspaceSnapshot();
-      toast.success("Thread created", { description: "A new launch workspace is ready." });
+      toast.success("Thread created", { description: "A new product launch workspace is ready." });
       await refreshThreads();
     } catch (error) {
       toast.error(error instanceof ApiError ? error.message : "Failed to create thread.");
@@ -296,7 +296,7 @@ export default function DashboardPage() {
           <div className="glass-panel rounded-[2rem] p-5 lg:p-6">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Launch workspace</p>
+                <p className="text-xs uppercase tracking-[0.24em] text-slate-400">Product Launch workspace</p>
                 <h1 className="mt-2 text-3xl font-semibold tracking-[-0.04em] text-white lg:text-5xl">Cinematic AI agent cockpit</h1>
                 <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-300 lg:text-base">
                   Create a thread, select a specialist, and stream the workflow while the backend persists each agent state in LangGraph.

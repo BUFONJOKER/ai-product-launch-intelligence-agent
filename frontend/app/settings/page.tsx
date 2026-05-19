@@ -59,7 +59,7 @@ export default function SettingsPage() {
       const updateData: SignUpRequest = {
         name: formData.name,
         email: formData.email,
-        password: formData.password || user?.email || "", // Use empty password if not changing
+        password: formData.password || "",
         api_key_openai: formData.api_key_openai,
       };
 

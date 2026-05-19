@@ -3,7 +3,7 @@ import { ArrowRight, BrainCircuit, Sparkles, Radar } from "lucide-react";
 
 const highlights = [
   "Real-time AI orchestration with LangGraph-aware state retention.",
-  "Authenticated launch workspaces backed by thread-aware persistence.",
+  "Authenticated product launch workspaces backed by thread-aware persistence.",
   "Glassmorphism dashboards, streaming timelines, and markdown-rich outputs.",
 ];
 
@@ -26,10 +26,10 @@ export default function Home() {
 
             <div className="space-y-5">
               <h1 className="max-w-4xl text-5xl font-semibold tracking-[-0.05em] text-white md:text-7xl">
-                A cinematic command center for launch analysis, streaming insight, and AI strategy.
+                A cinematic command center for product launch analysis, streaming insight, and AI strategy.
               </h1>
               <p className="max-w-2xl text-lg leading-8 text-slate-300 md:text-xl">
-                Analyze launch metrics, market sentiment, and strategic signals in a premium workspace that mirrors the backend&apos;s thread-aware LangGraph orchestration.
+                Analyze product launch metrics, market sentiment, and strategic signals in a premium workspace that mirrors the backend&apos;s thread-aware LangGraph orchestration.
               </p>
             </div>
 
@@ -64,7 +64,7 @@ export default function Home() {
             <div className="relative space-y-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm uppercase tracking-[0.24em] text-slate-400">Launch telemetry</p>
+                  <p className="text-sm uppercase tracking-[0.24em] text-slate-400">Product Launch telemetry</p>
                   <h2 className="mt-2 text-2xl font-semibold text-white">Intelligence stream</h2>
                 </div>
                 <div className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-xs text-emerald-200">
@@ -74,7 +74,7 @@ export default function Home() {
 
               <div className="space-y-3">
                 {[
-                  ["Thread orchestration", "Persisted agent state across launches"],
+                  ["Thread orchestration", "Persisted agent state across product launches"],
                   ["Streaming events", "Node and tool lifecycle updates in real time"],
                   ["AI response", "Markdown-rich strategic output with sources"],
                 ].map(([title, description]) => (
@@ -97,9 +97,9 @@ export default function Home() {
                 </div>
                 <div className="mt-4 grid gap-3">
                   {[
-                    ["launch_metrics_specialist", "KPI analysis and launch traction"],
+                    ["launch_metrics_specialist", "KPI analysis and product launch traction"],
                     ["market_sentiment_specialist", "Audience reaction and social perception"],
-                    ["product_launch_analyst", "Competitive launch recommendations"],
+                    ["product_launch_analyst", "Competitive product launch recommendations"],
                   ].map(([name, desc]) => (
                     <div key={name} className="flex items-center justify-between rounded-2xl border border-white/8 bg-white/5 px-4 py-3">
                       <div>

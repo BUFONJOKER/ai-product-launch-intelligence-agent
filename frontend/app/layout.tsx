@@ -15,7 +15,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Launch Intelligence",
+  title: "Product Launch Intelligence",
   description: "AI-powered product launch intelligence platform with real-time agent streaming.",
 };
 

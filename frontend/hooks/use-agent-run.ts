@@ -16,7 +16,7 @@ export function useAgentRun(apiKeyOpenAI?: string | null) {
   const [startedAt, setStartedAt] = useState<number | null>(null);
   const [now, setNow] = useState<number>(() => Date.now());
   const currentRunId = useRef(0);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timerRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!startedAt) {

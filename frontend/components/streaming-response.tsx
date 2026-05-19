@@ -44,6 +44,16 @@ function getSelectedAgentOutput(value: unknown, selectedAgent: AgentInvoke) {
   return "";
 }
 
+function getAgentHeading(selectedAgent: AgentInvoke): string {
+  const headingMap = {
+    launch_metrics_specialist: "Product Launch Metrics",
+    market_sentiment_specialist: "Market Sentiment",
+    product_launch_analyst: "Product Launch Analysis",
+  } as const;
+
+  return headingMap[selectedAgent];
+}
+
 export function StreamingResponse({ status, events, threadId, elapsedMs, error, finalResponse, selectedAgent }: StreamingResponseProps) {
   const [visibleText, setVisibleText] = useState("");
   const text = useMemo(() => getSelectedAgentOutput(finalResponse, selectedAgent), [finalResponse, selectedAgent]);
@@ -107,6 +117,7 @@ export function StreamingResponse({ status, events, threadId, elapsedMs, error, 
 
           {status === "complete" && text ? (
             <div className="rounded-3xl border border-white/8 bg-[#07101f] p-5">
+              <h3 className="mb-4 text-center text-3xl font-bold italic text-white">{getAgentHeading(selectedAgent)}</h3>
               <MarkdownRenderer content={visibleText || text} />
             </div>
           ) : (
