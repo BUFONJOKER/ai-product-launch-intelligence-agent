@@ -4,6 +4,7 @@ import { Search, Plus, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
 import { ThreadRecord } from "@/lib/types";
 import { ThreadList } from "@/components/thread-list";
+import { getThreadMetadata, loadWorkspaceHistory } from "@/lib/storage";
 
 interface SidebarProps {
   userName: string;
@@ -16,6 +17,7 @@ interface SidebarProps {
   onSelectThread: (threadId: string) => void;
   onLogout: () => void;
   loading?: boolean;
+  onDeleteThread?: (threadId: string) => void;
 }
 
 export function Sidebar({
@@ -29,8 +31,21 @@ export function Sidebar({
   onSelectThread,
   onLogout,
   loading,
+  onDeleteThread,
+
 }: SidebarProps) {
-  const filteredThreads = threads.filter((thread) => thread.thread_id.includes(searchQuery) || thread.email.includes(searchQuery));
+  const filteredThreads = threads
+    .filter((thread) => {
+      const meta = getThreadMetadata(thread.thread_id);
+      const name = meta?.company_name ?? thread.thread_id;
+      return name.toLowerCase().includes(searchQuery.toLowerCase()) || thread.email.includes(searchQuery);
+    })
+    .sort((a, b) => {
+      const history = loadWorkspaceHistory();
+      const aUpdated = history.find((h) => h.thread_id === a.thread_id)?.updated_at ?? new Date().toISOString();
+      const bUpdated = history.find((h) => h.thread_id === b.thread_id)?.updated_at ?? new Date().toISOString();
+      return new Date(bUpdated).getTime() - new Date(aUpdated).getTime();
+    });
 
   return (
     <aside className="glass-panel flex h-full flex-col rounded-[2rem] p-4 lg:p-5">
@@ -63,11 +78,11 @@ export function Sidebar({
         <button
           type="button"
           onClick={onCreateThread}
-             className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 to-cyan-300 px-4 py-3 text-sm font-semibold text-slate-950 transition-all hover:shadow-[0_8px_20px_rgba(34,211,238,0.3)] hover:scale-[1.02]"
+          className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 to-cyan-300 px-4 py-3 text-sm font-semibold text-slate-950 transition-all hover:shadow-[0_8px_20px_rgba(34,211,238,0.3)] hover:scale-[1.02]"
           disabled={loading}
         >
           <Plus className="h-4 w-4" />
-             New Project
+          New Project
         </button>
       </div>
 
@@ -76,7 +91,7 @@ export function Sidebar({
         <input
           value={searchQuery}
           onChange={(event) => onSearchChange(event.target.value)}
-             placeholder="Search companies..."
+          placeholder="Search projects or companies..."
           className="w-full bg-transparent outline-none placeholder:text-slate-500"
         />
       </label>
@@ -87,7 +102,7 @@ export function Sidebar({
           <span className="text-xs text-slate-500">{filteredThreads.length}</span>
         </div>
         <div className="h-[calc(100%-2rem)] overflow-y-auto pr-1">
-          <ThreadList threads={filteredThreads} activeThreadId={activeThreadId} onSelectThread={onSelectThread} />
+          <ThreadList threads={filteredThreads} activeThreadId={activeThreadId} onSelectThread={onSelectThread} onDeleteThread={onDeleteThread} />
         </div>
       </div>
 

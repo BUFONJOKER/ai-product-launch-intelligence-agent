@@ -101,6 +101,12 @@ export async function getAgentResponse(request: GetAgentRequest) {
   });
 }
 
+export async function deleteUserThread(email: string, threadId: string) {
+  return requestJson<void>(`/api/users/delete_user_thread/${encodeURIComponent(email)}/${encodeURIComponent(threadId)}`, {
+    method: "DELETE",
+  });
+}
+
 export async function startAgentStream(request: AgentRunRequest) {
   const response = await fetch(`${API_BASE}/api/agent_runs/start_agent`, {
     method: "POST",

@@ -193,3 +193,29 @@ def add_user_agent_thread(db: Session, email: str, thread_id: str):
         "thread_id": user.thread_id,
         "message": "User agent thread created successfully",
     }
+
+def delete_user_thread(db: Session, email: str, thread_id: str):
+    """Delete a user agent thread record from the database.
+
+    This function removes an entry from the `UserAgentThread` table that
+    matches the provided email and thread ID. It can be used to clean up
+    threads that are no longer needed.
+
+    Args:
+        db (Session): SQLAlchemy session used for the transaction.
+        email (str): The email address associated with the user agent thread.
+        thread_id (str): The unique thread ID for tracking the agent run.
+
+    Returns:
+        bool | None: `True` if deletion succeeded, `None` if no matching record was found.
+    """
+
+    user_thread = db.query(UserAgentThread).filter(UserAgentThread.email == email, UserAgentThread.thread_id == thread_id).first()
+
+    if not user_thread:
+        return None
+
+    db.delete(user_thread)
+    db.commit()
+
+    return True

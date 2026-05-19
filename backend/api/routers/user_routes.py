@@ -264,3 +264,44 @@ def delete_user(user: SignUpRequest, session: Session = Depends(get_db)):
             status_code=500,
             detail="Failed to delete user account. Please try again later.",
         ) from exc
+
+@user_router.delete("/delete_user_thread/{email}/{thread_id}")
+def delete_user_thread(email: str, thread_id: str, session: Session = Depends(get_db)):
+    """Delete a specific workflow thread associated with a user.
+
+    This endpoint removes a workflow thread from the database by matching the user's
+    email and the thread ID. This allows users to manage and clean up their threads
+    without affecting their entire account.
+
+    Args:
+        email (str): The email address of the user whose thread is to be deleted.
+        thread_id (str): The unique identifier of the thread to be deleted.
+        session (Session): SQLAlchemy database session provided by dependency injection.
+
+    Returns:
+        JSONResponse: A JSON response with status code 200 and a success message:
+            {"message": "Thread deleted successfully"}
+
+    Raises:
+        HTTPException: 404 status code if the thread is not found for the specified user.
+        HTTPException: 500 status code if an unexpected error occurs during deletion.
+    """
+    try:
+        deleted_thread = user_services.delete_user_thread(session, email, thread_id)
+        if deleted_thread is None:
+            raise HTTPException(
+                status_code=404,
+                detail="Thread not found for the specified user. Cannot delete non-existent thread.",
+            )
+        return JSONResponse(
+            status_code=200,
+            content={"message": "Thread deleted successfully."},
+        )
+    except HTTPException:
+        raise
+    except Exception as exc:
+        session.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to delete thread. Please try again later.",
+        ) from exc

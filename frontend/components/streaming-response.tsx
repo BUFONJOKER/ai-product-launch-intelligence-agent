@@ -6,6 +6,7 @@ import { SseStatusIndicator } from "@/components/sse-status-indicator";
 import { TimerBadge } from "@/components/timer-badge";
 import { MarkdownRenderer } from "@/components/markdown-renderer";
 import { AgentInvoke } from "@/lib/types";
+import { loadWorkspaceHistory } from "@/lib/storage";
 
 interface StreamingResponseProps {
   status: "idle" | "starting" | "streaming" | "loading-response" | "complete" | "error";
@@ -72,26 +73,38 @@ export function StreamingResponse({ status, events, threadId, elapsedMs, error, 
 
   return (
     <section className="glass-panel rounded-[2rem] p-5 lg:p-6">
-      {status === "complete" && companyName && (
-        <div className="mb-6 pb-6 border-b border-white/10">
-          <div className="flex flex-col gap-2 lg:gap-3">
-            <div className="flex flex-wrap items-baseline gap-2 lg:gap-3">
-              <h2 className="text-3xl lg:text-4xl font-bold text-white">{companyName}</h2>
-            </div>
-            <div className="flex flex-wrap items-center gap-2 lg:gap-3">
-              <span className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-500/20 to-cyan-400/10 border border-cyan-400/30 px-4 py-2 text-sm font-semibold text-cyan-100">
-                <span className="h-2 w-2 rounded-full bg-cyan-400" />
-                {selectedAgent.replace(/_/g, " ").toUpperCase()}
-              </span>
-              <span className="text-sm font-medium text-slate-300">{getAgentHeading(selectedAgent)}</span>
-            </div>
+      <div className="mb-6 pb-6 border-b border-white/10">
+        <div className="flex flex-col gap-2 lg:gap-3">
+          <div className="flex flex-wrap items-baseline gap-2 lg:gap-3">
+            <h2 className="text-3xl lg:text-4xl font-bold text-white">{companyName ?? "Untitled Project"}</h2>
+            {companyName ? (
+              <p className="text-sm text-slate-400 lg:ml-2">{getAgentHeading(selectedAgent)}</p>
+            ) : null}
           </div>
-          <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-slate-400">
-            <span>Generated: {new Date().toLocaleString()}</span>
-            <span>Duration: {Math.round(elapsedMs / 1000)}s</span>
+          <div className="flex flex-wrap items-center gap-2 lg:gap-3">
+            <span className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-500/20 to-cyan-400/10 border border-cyan-400/30 px-4 py-2 text-sm font-semibold text-cyan-100">
+              <span className="h-2 w-2 rounded-full bg-cyan-400" />
+              Agent: {selectedAgent.replace(/_/g, " ")}
+            </span>
+            <span className="text-sm font-medium text-slate-300">{companyName ? "" : ""}</span>
           </div>
         </div>
-      )}
+        <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-slate-400">
+          {/* try to show last saved run timestamp if available in workspace history */}
+          <span>
+            Generated: {(() => {
+              try {
+                const history = loadWorkspaceHistory();
+                const entry = threadId ? history.find((h) => h.thread_id === threadId) : null;
+                return entry?.updated_at ? new Date(entry.updated_at).toLocaleString() : new Date().toLocaleString();
+              } catch {
+                return new Date().toLocaleString();
+              }
+            })()}
+          </span>
+          <span>Duration: {Math.round(elapsedMs / 1000)}s</span>
+        </div>
+      </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>

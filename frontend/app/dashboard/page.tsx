@@ -20,10 +20,14 @@ import {
   clearWorkspaceSnapshot,
   loadWorkspaceHistory,
   loadWorkspaceSnapshot,
+  saveThreadMetadata,
   saveWorkspaceHistory,
   saveWorkspaceSnapshot,
   upsertWorkspaceHistory,
+  removeThreadMetadata
 } from "@/lib/storage";
+import { deleteUserThread } from "@/lib/api";
+
 
 const agents: Array<{
   title: string;
@@ -32,26 +36,26 @@ const agents: Array<{
   icon: typeof BrainCircuit;
   accent?: string;
 }> = [
-  {
-    title: "launch_metrics_specialist",
-    description: "Analyzes launch KPIs, growth metrics, and performance trends.",
-    invoke: "launch_metrics_specialist",
-    icon: BarChart3,
-  },
-  {
-    title: "market_sentiment_specialist",
-    description: "Analyzes social sentiment, audience reactions, and market perception.",
-    invoke: "market_sentiment_specialist",
-    icon: Radar,
-    accent: "violet",
-  },
-  {
-    title: "product_launch_analyst",
-    description: "Provides strategic launch analysis, recommendations, and competitor insights.",
-    invoke: "product_launch_analyst",
-    icon: Sparkles,
-  },
-];
+    {
+      title: "launch_metrics_specialist",
+      description: "Analyzes launch KPIs, growth metrics, and performance trends.",
+      invoke: "launch_metrics_specialist",
+      icon: BarChart3,
+    },
+    {
+      title: "market_sentiment_specialist",
+      description: "Analyzes social sentiment, audience reactions, and market perception.",
+      invoke: "market_sentiment_specialist",
+      icon: Radar,
+      accent: "violet",
+    },
+    {
+      title: "product_launch_analyst",
+      description: "Provides strategic launch analysis, recommendations, and competitor insights.",
+      invoke: "product_launch_analyst",
+      icon: Sparkles,
+    },
+  ];
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -69,6 +73,29 @@ export default function DashboardPage() {
   const [restoredResponse, setRestoredResponse] = useState<GetAgentResponse | null>(initialSnapshot?.response ?? null);
   const [restoringThread, setRestoringThread] = useState(false);
   const [workspaceStatus, setWorkspaceStatus] = useState<WorkspaceRunStatus>(initialSnapshot?.response ? "complete" : "idle");
+
+  const handleDeleteThread = async (threadId: string) => {
+    if (!auth?.email) {
+      toast.error("Sign in to delete threads.");
+      return;
+    }
+
+    try {
+      await deleteUserThread(auth.email, threadId);
+      // remove local metadata & local workspace history
+      removeThreadMetadata(threadId);
+      setWorkspaceHistory((prev) => prev.filter((h) => h.thread_id !== threadId));
+      if (activeThreadId === threadId) {
+        setActiveThreadId(null);
+        setManualThreadId(null);
+        clearWorkspaceSnapshot();
+      }
+      await refreshThreads();
+      toast.success("Thread deleted");
+    } catch (err) {
+      toast.error(err instanceof ApiError ? err.message : "Failed to delete thread.");
+    }
+  };
 
   useEffect(() => {
     if (hydrated && !auth) {
@@ -127,6 +154,8 @@ export default function DashboardPage() {
       setSelectedAgent(existingHistory.agent_invoke);
       setRestoredResponse(existingHistory.response);
       setWorkspaceStatus(existingHistory.status);
+      // persist metadata so sidebar shows company/product
+      saveThreadMetadata({ thread_id: threadId, company_name: existingHistory.company_name, agent_invoke: existingHistory.agent_invoke });
       setRestoringThread(false);
       return;
     }
@@ -185,7 +214,13 @@ export default function DashboardPage() {
     }
 
     if (!companyName.trim()) {
-      toast.error("Enter a company name before starting the agent.");
+      toast.error("Enter a company & product before starting the agent.");
+      return;
+    }
+
+    // require at least two words (company + product)
+    if (companyName.trim().split(/\s+/).length < 2) {
+      toast.error("Please enter both company and product (e.g. Apple Vision Pro).");
       return;
     }
 
@@ -201,6 +236,11 @@ export default function DashboardPage() {
         agentInvoke: selectedAgent,
         response: cachedResponse,
       });
+      // persist thread metadata so sidebar updates
+      if (manualThreadId && companyName?.trim()) {
+        saveThreadMetadata({ thread_id: manualThreadId, company_name: companyName.trim(), agent_invoke: selectedAgent });
+      }
+
       toast.success("Loaded saved response", {
         description: "This agent response was already generated for the selected thread.",
       });
@@ -237,13 +277,15 @@ export default function DashboardPage() {
               : null,
       } satisfies WorkspaceHistoryEntry;
 
-                  setWorkspaceHistory(upsertWorkspaceHistory(snapshot));
+      setWorkspaceHistory(upsertWorkspaceHistory(snapshot));
       saveWorkspaceSnapshot({
         activeThreadId: manualThreadId,
         companyName: companyName.trim(),
         agentInvoke: selectedAgent,
         response: normalizedResponse,
       });
+      // persist thread metadata for nicer thread cards
+      saveThreadMetadata({ thread_id: manualThreadId, company_name: companyName.trim(), agent_invoke: selectedAgent });
       await refreshThreads();
     } catch (error) {
       setWorkspaceStatus("error");
@@ -286,6 +328,7 @@ export default function DashboardPage() {
           onSearchChange={setSearchQuery}
           onCreateThread={createNewThread}
           onSelectThread={restoreThread}
+          onDeleteThread={handleDeleteThread}
           onLogout={handleLogout}
           loading={threadsLoading}
         />
@@ -311,18 +354,18 @@ export default function DashboardPage() {
           </div>
 
           <div className="glass-panel rounded-[2rem] p-5 lg:p-6">
-            <div className="grid gap-5 xl:grid-cols-[1fr_auto] xl:items-end">
-              <label className="space-y-2">
-                <span className="text-sm text-slate-300">Company name</span>
+            <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-end">
+              <label className="space-y-5">
+                <span className="text-sm text-slate-300">Company & Product</span>
                 <input
                   value={companyName}
                   onChange={(event) => setCompanyName(event.target.value)}
-                  placeholder="Enter the company or product launch to analyze"
-                  className="w-full rounded-[1.4rem] border border-white/10 bg-white/5 px-5 py-4 text-lg text-white outline-none transition focus:border-cyan-300/40 focus:ring-2 focus:ring-cyan-300/15"
+                  placeholder="Enter Company & Product Name (e.g. Apple Vision Pro)"
+                  className="h-11 w-full rounded-full border border-white/8 bg-gradient-to-r from-white/3 to-white/6 px-5 text-sm font-medium text-white outline-none transition-shadow duration-200 focus:border-cyan-300/40 focus:shadow-[0_8px_30px_rgba(34,211,238,0.12)]"
                 />
               </label>
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 <AnimatedButton tone="ghost" onClick={() => void createNewThread()}>
                   <Sparkles className="h-4 w-4" />
                   New Thread
@@ -359,6 +402,10 @@ export default function DashboardPage() {
                       agentInvoke: agent.invoke,
                       response: cachedEntry.response,
                     });
+                    // persist metadata so sidebar shows company/product for this thread
+                    if (activeThreadId && companyName?.trim()) {
+                      saveThreadMetadata({ thread_id: activeThreadId, company_name: companyName.trim(), agent_invoke: agent.invoke });
+                    }
                     toast.success("Loaded saved response", {
                       description: "This agent response was already generated for the selected thread.",
                     });
@@ -381,6 +428,7 @@ export default function DashboardPage() {
             error={agentRun.error}
             finalResponse={finalResponse}
             selectedAgent={selectedAgent}
+            companyName={companyName}
           />
 
           {!finalResponse && !agentRun.isBusy && !restoringThread ? (

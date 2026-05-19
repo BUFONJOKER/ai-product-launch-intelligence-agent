@@ -118,3 +118,9 @@ export function getThreadMetadata(threadId: string): ThreadMetadata | null {
   const all = loadThreadMetadata();
   return all.find((m) => m.thread_id === threadId) ?? null;
 }
+
+export function removeThreadMetadata(threadId: string) {
+  const current = loadThreadMetadata();
+  const next = current.filter((item) => item.thread_id !== threadId);
+  window.localStorage.setItem(THREAD_METADATA_KEY, JSON.stringify(next));
+}

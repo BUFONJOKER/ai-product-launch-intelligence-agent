@@ -49,8 +49,6 @@ export interface ThreadMetadata {
   thread_id: string;
   company_name: string;
   agent_invoke: AgentInvoke;
-  created_at: string;
-  updated_at: string;
 }
 
 export interface AgentRunRequest {
