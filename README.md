@@ -3,6 +3,13 @@
 A developer-focused, production-ready multi-agent system designed to analyze product launches in real time. Built with a high-performance **FastAPI** backend powered by **LangGraph** stateful workflows, it features a sleek **Next.js 14 (App Router)** frontend with robust Server-Sent Events (SSE) streaming capabilities.
 
 ---
+## Demo of Entire System Run
+
+
+
+Uploading Video Project -ai-product-intelligence.mp4…
+
+
 
 ## ✨ Features
 
