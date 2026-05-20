@@ -7,7 +7,11 @@ A developer-focused, production-ready multi-agent system designed to analyze pro
 
 
 
-Uploading Video Project -ai-product-intelligence.mp4…
+
+https://github.com/user-attachments/assets/91e9be01-2cd3-4a95-b461-3e93606d0c44
+
+
+
 
 
 
