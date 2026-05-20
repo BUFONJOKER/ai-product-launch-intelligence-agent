@@ -7,11 +7,12 @@ import { toast } from "sonner";
 import { GradientBackground } from "@/components/gradient-background";
 import { useAuth } from "@/hooks/use-auth";
 import { updateUser, ApiError } from "@/lib/api";
+import { saveAuthState } from "@/lib/storage";
 import { SignUpRequest } from "@/lib/types";
 
 export default function SettingsPage() {
   const router = useRouter();
-  const { user, isAuthenticated, logout } = useAuth();
+  const { auth, hydrated, isAuthenticated, clearAuth } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showApiKey, setShowApiKey] = useState(false);
@@ -23,20 +24,24 @@ export default function SettingsPage() {
   });
 
   useEffect(() => {
+    if (!hydrated) {
+      return;
+    }
+
     if (!isAuthenticated) {
       router.push("/auth/login");
       return;
     }
 
-    if (user) {
+    if (auth) {
       setFormData({
-        name: user.name || "",
-        email: user.email || "",
+        name: auth.name || "",
+        email: auth.email || "",
         password: "",
-        api_key_openai: user.api_key_openai || "",
+        api_key_openai: auth.api_key_openai || "",
       });
     }
-  }, [user, isAuthenticated, router]);
+  }, [auth, hydrated, isAuthenticated, router]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -67,12 +72,14 @@ export default function SettingsPage() {
       toast.success("Profile updated successfully");
 
       // Update localStorage with new user data
-      if (user) {
+      if (auth) {
         const updated = {
-          ...user,
-          ...response,
+          ...auth,
+          name: response.name,
+          email: response.email,
+          api_key_openai: formData.api_key_openai,
         };
-        localStorage.setItem("auth", JSON.stringify(updated));
+        saveAuthState(updated);
       }
 
       // Reload to show new data
@@ -240,7 +247,7 @@ export default function SettingsPage() {
             <div className="mt-6">
               <button
                 onClick={() => {
-                  logout();
+                  clearAuth();
                   router.push("/auth/login");
                 }}
                 className="w-full rounded-lg border border-rose-400/20 bg-rose-400/10 px-4 py-2.5 font-medium text-rose-100 transition-colors hover:bg-rose-400/20"
