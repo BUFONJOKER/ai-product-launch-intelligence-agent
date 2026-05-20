@@ -1,3 +1,5 @@
+
+---
 # AI Product Launch Intelligence Agent Backend
 
 A FastAPI-based backend for analyzing product launches using AI-powered specialist agents. The system provides real-time market insights, sentiment analysis, and launch metrics through a LangGraph workflow with stateful conversation management.
@@ -10,14 +12,18 @@ A FastAPI-based backend for analyzing product launches using AI-powered speciali
 - [API Reference](#api-reference)
 - [Setup & Installation](#setup--installation)
 - [Environment Configuration](#environment-configuration)
+- [Docker Deployment](#docker-deployment)
 - [Running the Backend](#running-the-backend)
+- [Live Demo & Hosting](#live-demo--hosting)
 - [API Usage Examples](#api-usage-examples)
 
 ## Architecture
 
 The backend uses a **LangGraph-based agentic workflow** with the following components:
 
+
 ```
+
 FastAPI Server
 ├── User Management (Authentication & Authorization)
 ├── Agent Execution Engine
@@ -28,10 +34,11 @@ FastAPI Server
 │   ├── /api/users (User authentication)
 │   └── /api/agent_runs (Agent execution)
 └── Supporting Services
-    ├── Database (SQLAlchemy + Alembic)
-    ├── Encryption (API key management)
-    ├── Tool Integration (Tavily Search)
-    └── Token Management (JWT)
+├── Database (SQLAlchemy + Alembic)
+├── Encryption (API key management)
+├── Tool Integration (Tavily Search)
+└── Token Management (JWT)
+
 ```
 
 ### Key Design Patterns
@@ -102,9 +109,11 @@ Register a new user account.
   "password": "secure_password",
   "api_key_openai": "sk-..."
 }
+
 ```
 
 **Response (201):**
+
 ```json
 {
   "name": "John Doe",
@@ -112,20 +121,25 @@ Register a new user account.
   "api_key_openai": "encrypted_key",
   "message": "User created successfully"
 }
+
 ```
 
 #### POST `/api/users/login`
+
 Authenticate a user and receive a JWT token.
 
 **Request Body:**
+
 ```json
 {
   "email": "john@example.com",
   "password": "secure_password"
 }
+
 ```
 
 **Response (200):**
+
 ```json
 {
   "access_token": "eyJhbGc...",
@@ -135,14 +149,17 @@ Authenticate a user and receive a JWT token.
   "api_key_openai": "decrypted_key",
   "message": "User retrieved successfully"
 }
+
 ```
 
 ### Agent Execution
 
 #### POST `/api/agent_runs/run`
+
 Execute an agent workflow with streaming responses.
 
 **Request Body:**
+
 ```json
 {
   "company_name": "TechCorp Inc",
@@ -150,9 +167,11 @@ Execute an agent workflow with streaming responses.
   "thread_id": "550e8400-e29b-41d4-a716-446655440000",
   "api_key_openai": "sk-..."
 }
+
 ```
 
 **Streaming Response (Server-Sent Events):**
+
 ```
 data: {"type": "thread_id", "thread_id": "550e8400-e29b-41d4-a716-446655440000"}
 
@@ -161,15 +180,19 @@ data: {"type": "node_start", "node": "product_launch_analyst"}
 data: {"type": "tool_start", "tool": "tavily_search"}
 
 data: {"type": "node_end", "node": "product_launch_analyst"}
+
 ```
 
 #### GET `/api/agent_runs/get`
+
 Retrieve the complete state of a workflow run.
 
 **Query Parameters:**
-- `thread_id` (required): UUID of the workflow run
+
+* `thread_id` (required): UUID of the workflow run
 
 **Response (200):**
+
 ```json
 {
   "thread_id": "550e8400-e29b-41d4-a716-446655440000",
@@ -177,12 +200,15 @@ Retrieve the complete state of a workflow run.
   "market_sentiment_specialist_agent_output": "...",
   "launch_metrics_specialist_agent_output": "..."
 }
+
 ```
 
 #### GET `/`
+
 Get the auto-generated API endpoint directory.
 
 **Response (200):**
+
 ```json
 {
   "message": "API endpoint directory",
@@ -196,33 +222,37 @@ Get the auto-generated API endpoint directory.
     }
   ]
 }
+
 ```
 
 ## Setup & Installation
 
 ### Prerequisites
 
-- **Python 3.11+**
-- **PostgreSQL 12+**
-- **uv** (Python package manager) - [Install uv](https://docs.astral.sh/uv/getting-started/)
+* **Python 3.11+**
+* **PostgreSQL 12+**
+* **uv** (Python package manager) - [Install uv](https://docs.astral.sh/uv/getting-started/)
 
 ### Step 1: Clone and Navigate
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/BUFONJOKER/ai-product-launch-intelligence-agent.git
 cd ai-product-launch-intelligence-agent/backend
+
 ```
 
 ### Step 2: Install Dependencies with uv
 
 ```bash
 uv sync
+
 ```
 
 This command:
-- Creates a virtual environment
-- Installs all dependencies from `pyproject.toml`
-- Installs development dependencies
+
+* Creates a virtual environment
+* Installs all dependencies from `pyproject.toml`
+* Installs development dependencies
 
 ### Step 3: Set Up Environment Variables
 
@@ -232,6 +262,7 @@ Create a `.env` file in the backend directory:
 cp .env.example .env  # if template exists
 # OR
 nano .env  # create manually
+
 ```
 
 ## Environment Configuration
@@ -254,12 +285,13 @@ ENCRYPTION_MASTER_KEY=your_encryption_master_key_here
 # Environment
 ENV=development
 DEBUG=False
+
 ```
 
 ### Required Environment Variables
 
 | Variable | Description | Example |
-|----------|-------------|---------|
+| --- | --- | --- |
 | `DB_URL` | PostgreSQL connection string | `postgresql://user:pass@localhost/db` |
 | `DB_URL_API` | PostgreSQL for API (usually same as DB_URL) | `postgresql://user:pass@localhost/db` |
 | `TAVILY_API_KEY` | Tavily Search API key | `tvly-...` |
@@ -274,6 +306,7 @@ python -c "import secrets; print(secrets.token_urlsafe(32))"
 
 # Generate encryption master key
 python -c "import secrets; print(secrets.token_hex(16))"
+
 ```
 
 ## Running the Backend
@@ -282,6 +315,7 @@ python -c "import secrets; print(secrets.token_hex(16))"
 
 ```bash
 uv run python main.py
+
 ```
 
 Server starts at: `http://localhost:8000`
@@ -290,6 +324,7 @@ Server starts at: `http://localhost:8000`
 
 ```bash
 uv run uvicorn main:app --host 0.0.0.0 --port 8000
+
 ```
 
 ### Run Database Migrations
@@ -300,6 +335,7 @@ uv run alembic revision --autogenerate -m "description"
 
 # Apply migrations
 uv run alembic upgrade head
+
 ```
 
 ### Check API Status
@@ -307,6 +343,42 @@ uv run alembic upgrade head
 Visit `http://localhost:8000/` to see the auto-generated API endpoint directory.
 
 Access Swagger UI documentation at: `http://localhost:8000/docs`
+
+---
+
+## Docker Deployment
+
+The official Docker image for this backend is packaged and hosted on Docker Hub. You can pull and run it directly with your custom environment variables.
+
+### Pull the Image
+
+```bash
+docker pull bufonjoker/ai-product-launch-intelligence-agent-backend:latest
+
+```
+
+### Run the Container
+
+```bash
+docker run -d \
+  -p 8000:8000 \
+  --env-file .env \
+  --name launch-agent-backend \
+  bufonjoker/ai-product-launch-intelligence-agent-backend:latest
+
+```
+
+---
+
+## Live Demo & Hosting
+
+A live instance of this API is hosted on Hugging Face Spaces for testing and remote integration:
+
+🔗 **API Base Endpoint:** [https://bufon-joker-ai-product-launch-intelligence-agent-backend.hf.space](https://www.google.com/search?q=https://bufon-joker-ai-product-launch-intelligence-agent-backend.hf.space)
+
+*Note: For interaction with the live endpoint, ensure your client targets this HTTPS base URL instead of localhost.*
+
+---
 
 ## API Usage Examples
 
@@ -323,6 +395,7 @@ curl -X POST "http://localhost:8000/api/users/signup" \
     "password": "securepass123",
     "api_key_openai": "sk-proj-..."
   }'
+
 ```
 
 #### 2. User Login
@@ -334,6 +407,7 @@ curl -X POST "http://localhost:8000/api/users/login" \
     "email": "alice@example.com",
     "password": "securepass123"
   }'
+
 ```
 
 Response includes `access_token` and `api_key_openai`.
@@ -350,6 +424,7 @@ curl -X POST "http://localhost:8000/api/agent_runs/run" \
     "api_key_openai": "sk-..."
   }' \
   --stream
+
 ```
 
 #### 4. Run Another Agent on Same Thread
@@ -364,6 +439,7 @@ curl -X POST "http://localhost:8000/api/agent_runs/run" \
     "api_key_openai": "sk-..."
   }' \
   --stream
+
 ```
 
 Previous `product_launch_analyst_agent_output` is preserved in state.
@@ -372,49 +448,10 @@ Previous `product_launch_analyst_agent_output` is preserved in state.
 
 ```bash
 curl -X GET "http://localhost:8000/api/agent_runs/get?thread_id=550e8400-e29b-41d4-a716-446655440000"
+
 ```
 
 Response contains all three agent outputs.
-
-### Python Client Example
-
-```python
-import requests
-import json
-
-BASE_URL = "http://localhost:8000"
-
-# Login
-login_response = requests.post(
-    f"{BASE_URL}/api/users/login",
-    json={"email": "alice@example.com", "password": "securepass123"}
-)
-token = login_response.json()["access_token"]
-api_key = login_response.json()["api_key_openai"]
-
-# Run agent with streaming
-response = requests.post(
-    f"{BASE_URL}/api/agent_runs/run",
-    json={
-        "company_name": "OpenAI",
-        "agent_invoke": "product_launch_analyst",
-        "thread_id": "550e8400-e29b-41d4-a716-446655440000",
-        "api_key_openai": api_key
-    },
-    stream=True
-)
-
-for line in response.iter_lines():
-    if line:
-        event = json.loads(line.decode())
-        print(f"Event: {event['type']}")
-
-# Get results
-results = requests.get(
-    f"{BASE_URL}/api/agent_runs/get?thread_id=550e8400-e29b-41d4-a716-446655440000"
-)
-print(json.dumps(results.json(), indent=2))
-```
 
 ## Project Structure
 
@@ -437,22 +474,31 @@ backend/
 │   ├── database/             # Database connection
 │   └── access_tokens/        # JWT token management
 └── alembic/                  # Database migrations
+
 ```
 
 ## Troubleshooting
 
 ### Database Connection Error
+
 Ensure PostgreSQL is running and `.env` contains valid `DB_URL`.
 
 ### TAVILY_API_KEY Missing
+
 Get your API key from [Tavily](https://tavily.com/) and add to `.env`.
 
 ### Agent Timeout
+
 Increase tool call limits in agent node files or adjust timeout settings.
 
 ### State Not Persisting
+
 Verify PostgreSQL checkpointer table exists: `alembic upgrade head`
 
 ---
 
 **Happy analyzing!** 🚀
+
+```
+
+```
