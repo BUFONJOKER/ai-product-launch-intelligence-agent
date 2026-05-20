@@ -32,6 +32,17 @@ build/
 *.egg-info/
 *.log
 
+# Non-runtime repository files
+README.md
+alembic/
+alembic.ini
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.gif
+**/*.webp
+**/*.md
+
 # Docker
 Dockerfile*
 .dockerignore

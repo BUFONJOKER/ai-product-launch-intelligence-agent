@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.routing import APIRoute
 from api.routers.user_routes import user_router
@@ -8,14 +10,16 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(debug=DEBUG)
 
-origins = [
-    "http://localhost",
-    "http://localhost:3000",
-]
+# Production Security: Read allowed origins from an environment variable,
+# defaulting to localhost for local development.
+allowed_origins = os.getenv(
+    "CORS_ORIGINS",
+    "http://localhost,http://localhost:3000"
+).split(",")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -28,7 +32,6 @@ app.include_router(agent_run_router)
 @app.get("/")
 def root():
     """Return a compact directory of the API endpoints registered in the app."""
-
     endpoints = []
 
     for route in app.routes:
@@ -59,4 +62,15 @@ def root():
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    # CRITICAL FIX: Must default to "0.0.0.0" in container environments
+    # to let Hugging Face pass incoming traffic through.
+    host = os.getenv("HOST", "0.0.0.0")
+
+    # Hugging Face will automatically inject PORT=7860 into your environment variables,
+    # falling back to 8000 locally.
+    port = int(os.getenv("PORT", "8000"))
+
+    # Production Notice: Turn reload off in production for better performance
+    is_debug = os.getenv("ENVIRONMENT", "development").lower() == "development"
+
+    uvicorn.run("main:app", host=host, port=port, reload=is_debug)
